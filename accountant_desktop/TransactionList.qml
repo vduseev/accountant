@@ -6,6 +6,8 @@ import QtQuick.Layouts 1.1
 Item {
     id: root
 
+    property string dateFormat: "value"
+
     TransactionListHeaders {
         id: transactionListHeaders
         height: 30
@@ -17,6 +19,7 @@ Item {
         model: transactionListMockModel
         anchors { left: parent.left; top: transactionListHeaders.bottom; right: parent.right; bottom: parent.bottom }
         clip: true
+        footerPositioning: ListView.InlineFooter
 
         delegate: TransactionListDelegate {
             height: 30
@@ -30,15 +33,16 @@ Item {
             fontPixelSize: 14
         }
 
-        footer: Item {
-            width: parent.width
+        footer: TransactionListNewRecord {
             height: 30
+            width: parent.width
 
-            Button {
-                anchors.fill: parent
-                text: "Add Transaction"
-                onClicked: console.log(4 % 2)
-            }
+            dateColumnWidth: transactionListHeaders.dateColumnWidth
+            fromAccountColumnWidth: transactionListHeaders.fromAccountColumnWidth
+            toAccountColumnWidth: transactionListHeaders.toAccountColumnWidth
+            descriptionColumnWidth: transactionListHeaders.descriptionColumnWidth
+            amountColumnWidth: transactionListHeaders.amountColumnWidth
+            fontPixelSize: 14
         }
     }
 
@@ -48,19 +52,19 @@ Item {
 
     ListModel {
         id: transactionListMockModel
-        ListElement { date: "Mon 21 Nov 04:27"; from_account: "ING Visa"; to_account: "JetBrains"; description: "Monthly subscription"; amount: 546.34; cur: "PLN" }
-        ListElement { date: "Tue 22 Nov 04:27"; from_account: "ING Visa"; to_account: "JetBrains"; description: "Monthly subscription"; amount: 546.34; cur: "PLN" }
-        ListElement { date: "Wed 23 Nov 04:27"; from_account: "ING Visa"; to_account: "JetBrains"; description: "Monthly subscription"; amount: 546.34; cur: "PLN" }
-        ListElement { date: "Thu 24 Nov 04:27"; from_account: "ING Visa"; to_account: "JetBrains"; description: "Monthly subscription"; amount: 546.34; cur: "PLN" }
-        ListElement { date: "Fri 25 Nov 04:27"; from_account: "ING Visa"; to_account: "JetBrains"; description: "Monthly subscription"; amount: 546.34; cur: "PLN" }
-        ListElement { date: "Sat 26 Nov 04:27"; from_account: "ING Visa"; to_account: "JetBrains"; description: "Monthly subscription"; amount: 546.34; cur: "PLN" }
-        ListElement { date: "Sun 27 Nov 04:27"; from_account: "ING Visa"; to_account: "JetBrains"; description: "Monthly subscription"; amount: 546.34; cur: "PLN" }
-        ListElement { date: "Sun 27 Nov 04:27"; from_account: "ING Visa"; to_account: "JetBrains"; description: "Monthly subscription"; amount: 546.34; cur: "PLN" }
-        ListElement { date: "Mon 28 Nov 04:27"; from_account: "ING Visa"; to_account: "JetBrains"; description: "Monthly subscription"; amount: 546.34; cur: "PLN" }
-        ListElement { date: "Mon 28 Nov 04:27"; from_account: "ING Visa"; to_account: "JetBrains"; description: "Monthly subscription"; amount: 546.34; cur: "PLN" }
-        ListElement { date: "Tue 29 Nov 04:27"; from_account: "ING Visa"; to_account: "JetBrains"; description: "Monthly subscription"; amount: 546.34; cur: "PLN" }
-        ListElement { date: "Fri 01 Dec 04:27"; from_account: "ING Visa"; to_account: "JetBrains"; description: "Monthly subscription"; amount: 546.34; cur: "PLN" }
-        ListElement { date: "Mon 04 Dec 04:27"; from_account: "ING Visa"; to_account: "JetBrains"; description: "Monthly subscription"; amount: 546.34; cur: "PLN" }
-        ListElement { date: "Wed 05 Dec 04:27"; from_account: "ING Visa"; to_account: "JetBrains"; description: "Monthly subscription"; amount: 546.34; cur: "PLN" }
+        Component.onCompleted: loadMockData()
+    }
+
+    function loadMockData() {
+        for (var i = 1; i < 30; i++) {
+            transactionListMockModel.append({
+                "date": "November " + i + ", 2016 03:24:00",
+                "from_account": "ING Visa",
+                "to_account": "JetBrains",
+                "description": "Monthly subscription",
+                "amount": 546.38,
+                "cur": "PLN"
+            })
+        }
     }
 }

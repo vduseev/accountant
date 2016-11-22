@@ -6,7 +6,7 @@ ApplicationWindow {
     visible: true
     width: 840
     height: 480
-    title: qsTr("Hello World")
+    title: qsTr("The Accountant")
 
     TransactionList {
         id: transactionList

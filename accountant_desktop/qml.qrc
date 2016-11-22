@@ -7,5 +7,7 @@
         <file>TransactionListDelegate.qml</file>
         <file>TransactionListHeaders.qml</file>
         <file>TransactionListNewRecord.qml</file>
+        <file>TransactionListColumnSeparator.qml</file>
+        <file>EditableText.qml</file>
     </qresource>
 </RCC>

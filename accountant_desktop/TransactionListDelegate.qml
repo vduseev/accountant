@@ -1,4 +1,5 @@
 import QtQuick 2.0
+import QtQml 2.2
 
 Rectangle {
     id: root
@@ -10,7 +11,7 @@ Rectangle {
     property int amountColumnWidth: null
     property int fontPixelSize: null
 
-    color: index % 2 == 0 ? "transparent" : "#f0f0f0"
+    color: index % 2 == 0 ? "#fafafa" : "#efefef"
 
     property int columnMargin: 0
 
@@ -19,8 +20,18 @@ Rectangle {
         width: dateColumnWidth + 1
         anchors { left: parent.left; top: parent.top; bottom: parent.bottom }
 
-        Text { id: dateLabel; anchors { left: parent.left; leftMargin: 10; verticalCenter: parent.verticalCenter } text: date; font.pixelSize: fontPixelSize }
-        Rectangle { height: parent.height; width: 1; anchors { right: parent.right; verticalCenter: parent.verticalCenter } color: "lightgray" }
+        Text {
+            id: dateLabel
+            anchors {
+                left: parent.left
+                leftMargin: 10
+                verticalCenter: parent.verticalCenter
+            }
+
+            text: new Date(date).toLocaleString(Locale.ShortFormat)
+            font.pixelSize: fontPixelSize
+        }
+        TransactionListColumnSeparator { }
     }
 
     Item {
@@ -29,7 +40,7 @@ Rectangle {
         anchors { left: dateColumn.right; leftMargin: columnMargin; top: parent.top; bottom: parent.bottom }
 
         Text { id: fromAccountLabel; anchors { left: parent.left; leftMargin: 10; verticalCenter: parent.verticalCenter } text: from_account; font.pixelSize: fontPixelSize }
-        Rectangle { height: parent.height; width: 1; anchors { right: parent.right; verticalCenter: parent.verticalCenter } color: "lightgray" }
+        TransactionListColumnSeparator { }
     }
 
     Item {
@@ -38,7 +49,7 @@ Rectangle {
         anchors { left: fromAccountColumn.right; leftMargin: columnMargin; top: parent.top; bottom: parent.bottom }
 
         Text { id: toAccountLabel; anchors { left: parent.left; leftMargin: 10; verticalCenter: parent.verticalCenter } text: to_account; font.pixelSize: fontPixelSize }
-        Rectangle { height: parent.height; width: 1; anchors { right: parent.right; verticalCenter: parent.verticalCenter } color: "lightgray" }
+        TransactionListColumnSeparator { }
     }
 
     Item {
@@ -47,7 +58,7 @@ Rectangle {
         anchors { left: toAccountColumn.right; leftMargin: columnMargin; top: parent.top; bottom: parent.bottom }
 
         Text { id: descriptionLabel; anchors { left: parent.left; leftMargin: 10; verticalCenter: parent.verticalCenter } text: description; font.pixelSize: fontPixelSize }
-        Rectangle { height: parent.height; width: 1; anchors { right: parent.right; verticalCenter: parent.verticalCenter } color: "lightgray" }
+        TransactionListColumnSeparator { }
     }
 
     Item {
