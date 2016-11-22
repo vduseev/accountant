@@ -69,7 +69,13 @@ Rectangle {
         width: fromAccountColumnWidth + 1
         anchors { left: dateColumn.right; top: parent.top; bottom: parent.bottom }
 
-        TextInput { id: fromAccountLabel; anchors { fill: parent; margins: 10 } font.pixelSize: fontPixelSize }
+        Lookup {
+            id: fromAccountLookup
+            anchors { fill: parent }
+            fontPixelSize: root.fontPixelSize
+            placeholderText: "Withdrawal account"
+        }
+
         TransactionListColumnSeparator { }
     }
 
@@ -78,7 +84,13 @@ Rectangle {
         width: toAccountColumnWidth + 1
         anchors { left: fromAccountColumn.right; top: parent.top; bottom: parent.bottom }
 
-        TextInput { id: toAccountLabel; anchors { fill: parent; margins: 10 } font.pixelSize: fontPixelSize }
+        Lookup {
+            id: toAccountLookup
+            anchors { fill: parent }
+            fontPixelSize: root.fontPixelSize
+            placeholderText: "Deposit account"
+        }
+
         TransactionListColumnSeparator { }
     }
 
