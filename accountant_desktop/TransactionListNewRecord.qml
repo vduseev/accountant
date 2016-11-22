@@ -87,23 +87,10 @@ Rectangle {
         width: descriptionColumnWidth + 1
         anchors { left: toAccountColumn.right; top: parent.top; bottom: parent.bottom }
 
-        TextField {
+        EditableText {
             id: descriptionTextField
             anchors { fill: parent }
             font.pixelSize: fontPixelSize
-            background: Rectangle {
-                color: descriptionTextField.focus == true ? "#f0f0f0" : "white"
-
-                Rectangle {
-                    width: parent.width
-                    height: 1
-                    anchors.bottom: parent.bottom
-                    color: "transparent"
-                    border.color: "#21be2b"
-                    visible: descriptionTextField.focus
-                }
-            }
-
             placeholderText: "Transaction description"
         }
 

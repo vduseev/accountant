@@ -9,5 +9,6 @@
         <file>TransactionListNewRecord.qml</file>
         <file>TransactionListColumnSeparator.qml</file>
         <file>EditableText.qml</file>
+        <file>Lookup.qml</file>
     </qresource>
 </RCC>
