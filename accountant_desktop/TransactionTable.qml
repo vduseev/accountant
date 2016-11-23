@@ -4,6 +4,8 @@ import QtQuick.Controls 1.4
 TableView {
     id: root
 
+    selectionMode: SelectionMode.ExtendedSelection
+
     TableViewColumn { role: "date"; title: "Date" }
     TableViewColumn { role: "from_account"; title: "From" }
     TableViewColumn { role: "to_account"; title: "To" }
