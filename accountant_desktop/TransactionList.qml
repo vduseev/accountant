@@ -6,7 +6,7 @@ import QtQuick.Layouts 1.1
 Item {
     id: root
 
-    property string dateFormat: "value"
+    property alias model: transactionListView.model
 
     TransactionListHeaders {
         id: transactionListHeaders
@@ -46,27 +46,5 @@ Item {
         }
 
         Component.onCompleted: positionViewAtEnd()
-    }
-
-    ListModel {
-        id: transactionListModel
-    }
-
-    ListModel {
-        id: transactionListMockModel
-        Component.onCompleted: loadMockData()
-    }
-
-    function loadMockData() {
-        for (var i = 1; i < 20; i++) {
-            transactionListMockModel.append({
-                "date": "November " + i + ", 2016 03:24:00",
-                "from_account": "ING Visa",
-                "to_account": "JetBrains",
-                "description": "Monthly subscription",
-                "amount": 546.38,
-                "cur": "PLN"
-            })
-        }
     }
 }

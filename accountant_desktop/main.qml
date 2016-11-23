@@ -9,9 +9,33 @@ ApplicationWindow {
     height: 600//Screen.desktopAvailableHeight
     title: qsTr("The Accountant")
 
+//    TransactionList {
+//        id: transactionList
+//        anchors.fill: parent
+//        model: transactionListMockModel
+//    }
 
-    TransactionList {
-        id: transactionList
+    TransactionTable {
+        id: transactionTable
         anchors.fill: parent
+        model: transactionListMockModel
+    }
+
+    ListModel {
+        id: transactionListMockModel
+        Component.onCompleted: loadMockData()
+    }
+
+    function loadMockData() {
+        for (var i = 1; i < 20; i++) {
+            transactionListMockModel.append({
+                "date": "November " + i + ", 2016 03:24:00",
+                "from_account": "ING Visa",
+                "to_account": "JetBrains",
+                "description": "Monthly subscription",
+                "amount": 546.38,
+                "cur": "PLN"
+            })
+        }
     }
 }

@@ -11,5 +11,6 @@
         <file>EditableField.qml</file>
         <file>LookupField.qml</file>
         <file>CalendarField.qml</file>
+        <file>TransactionTable.qml</file>
     </qresource>
 </RCC>
