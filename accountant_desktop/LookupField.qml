@@ -3,11 +3,12 @@ import QtQuick.Window 2.2
 
 Item {
     id: root
+    z: 2
 
     property int fontPixelSize: null
     property string placeholderText: null
 
-    EditableText {
+    EditableField {
         id: lookupText
         anchors.fill: parent
         font.pixelSize: fontPixelSize
@@ -28,7 +29,7 @@ Item {
         id: lookupListView
         anchors { left: parent.left; top: lookupText.bottom; right: parent.right }
         //anchors { left: parent.left; bottom: lookupText.top; right: parent.right }
-        z: 2
+        z: 99
 
         model: lookupMockModel
         visible: false

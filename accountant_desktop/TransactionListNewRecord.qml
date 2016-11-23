@@ -14,52 +14,19 @@ Rectangle {
     property int amountColumnWidth: null
     property int fontPixelSize: null
 
-    property date transactionDate: new Date()
-
     /* Date and Time picker */
     Item {
         id: dateColumn
         width: dateColumnWidth + 1
-        z: 1
         anchors { left: parent.left; top: parent.top; bottom: parent.bottom }
 
-
-        MouseArea {
-            id: dateTimeArea
+        CalendarField {
+            id: calendarField
             anchors.fill: parent
-            onClicked: {
-                dateColumn.state = "select_date"
-            }
-
-            Text {
-                id: dateTimeLabel
-                anchors { left: parent.left; leftMargin: 10; verticalCenter: parent.verticalCenter }
-                text: transactionDate.toLocaleString(Locale.ShortFormat)
-                font.pixelSize: fontPixelSize
-                visible: true
-            }
+            //z: 3
+            fontPixelSize: root.fontPixelSize
+            calendarDate: new Date()
         }
-
-        Calendar {
-            id: calendar
-            anchors { left: parent.left; bottom: parent.bottom; margins: 10 }
-            z: 1
-            visible: false
-
-            /* Date has been selected */
-            onClicked: {
-                transactionDate = date
-                dateColumn.state = "" // go back to default state
-            }
-        }
-
-        states: [
-            State {
-                name: "select_date"
-                PropertyChanges { target: dateTimeLabel; visible: false }
-                PropertyChanges { target: calendar; visible: true }
-            }
-        ]
 
         TransactionListColumnSeparator { }
     }
@@ -69,7 +36,7 @@ Rectangle {
         width: fromAccountColumnWidth + 1
         anchors { left: dateColumn.right; top: parent.top; bottom: parent.bottom }
 
-        Lookup {
+        LookupField {
             id: fromAccountLookup
             anchors { fill: parent }
             fontPixelSize: root.fontPixelSize
@@ -84,7 +51,7 @@ Rectangle {
         width: toAccountColumnWidth + 1
         anchors { left: fromAccountColumn.right; top: parent.top; bottom: parent.bottom }
 
-        Lookup {
+        LookupField {
             id: toAccountLookup
             anchors { fill: parent }
             fontPixelSize: root.fontPixelSize
@@ -99,7 +66,7 @@ Rectangle {
         width: descriptionColumnWidth + 1
         anchors { left: toAccountColumn.right; top: parent.top; bottom: parent.bottom }
 
-        EditableText {
+        EditableField {
             id: descriptionTextField
             anchors { fill: parent }
             font.pixelSize: fontPixelSize

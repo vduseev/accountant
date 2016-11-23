@@ -8,7 +8,8 @@
         <file>TransactionListHeaders.qml</file>
         <file>TransactionListNewRecord.qml</file>
         <file>TransactionListColumnSeparator.qml</file>
-        <file>EditableText.qml</file>
-        <file>Lookup.qml</file>
+        <file>EditableField.qml</file>
+        <file>LookupField.qml</file>
+        <file>CalendarField.qml</file>
     </qresource>
 </RCC>

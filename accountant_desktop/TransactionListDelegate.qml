@@ -20,17 +20,13 @@ Rectangle {
         width: dateColumnWidth + 1
         anchors { left: parent.left; top: parent.top; bottom: parent.bottom }
 
-        Text {
-            id: dateLabel
-            anchors {
-                left: parent.left
-                leftMargin: 10
-                verticalCenter: parent.verticalCenter
-            }
-
-            text: new Date(date).toLocaleString(Locale.ShortFormat)
-            font.pixelSize: fontPixelSize
+        CalendarField {
+            id: calendarField
+            anchors.fill: parent
+            fontPixelSize: root.fontPixelSize
+            calendarDate: new Date(date)
         }
+
         TransactionListColumnSeparator { }
     }
 
