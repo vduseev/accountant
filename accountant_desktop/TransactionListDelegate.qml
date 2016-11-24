@@ -23,7 +23,7 @@ Rectangle {
         CalendarField {
             id: calendarField
             anchors.fill: parent
-            fontPixelSize: root.fontPixelSize
+            //fontPixelSize: root.fontPixelSize
             calendarDate: new Date(date)
         }
 

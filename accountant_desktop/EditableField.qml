@@ -3,6 +3,7 @@ import QtQuick.Controls 2.0
 
 TextField {
     id: editableTextField
+
     background: Rectangle {
         color: editableTextField.focus == true ? "#f0f0f0" : "white"
 

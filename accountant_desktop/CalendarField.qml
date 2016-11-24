@@ -7,7 +7,6 @@ Item {
     id: root
 
     property date calendarDate: null
-    property int fontPixelSize: null
     property bool doubleClickTriggered: true
 
     MouseArea {
@@ -22,8 +21,7 @@ Item {
 
         onDoubleClicked: {
             if (doubleClickTriggered) {
-                //root.state = "select_date"
-                calendarPopup.open()
+                //calendarPopup.open()
             }
         }
 
@@ -31,20 +29,20 @@ Item {
             id: dateTimeLabel
             anchors { left: parent.left; leftMargin: 10; verticalCenter: parent.verticalCenter }
             text: calendarDate.toLocaleString(Locale.ShortFormat)
-            font.pixelSize: fontPixelSize
             visible: true
         }
     }
 
-    Popup {
-        id: calendarPopup
-        modal: true
-        focus: true
-        closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
+//    Popup {
+//        id: calendarPopup
+//        modal: true
+//        focus: true
+//        margins: 10
+//        closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
 
-        Calendar {
-            id: calendar
-            anchors.fill: parent
-        }
-    }
+//        Calendar {
+//            id: calendar
+//            anchors { fill: parent }
+//        }
+//    }
 }

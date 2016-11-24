@@ -27,9 +27,9 @@ ApplicationWindow {
     }
 
     function loadMockData() {
-        for (var i = 1; i < 20; i++) {
+        for (var i = 1; i < 200; i++) {
             transactionListMockModel.append({
-                "date": "November " + i + ", 2016 03:24:00",
+                "date": "November " + (i % 30 + 1) + ", 2016 03:24:00",
                 "from_account": "ING Visa",
                 "to_account": "JetBrains",
                 "description": "Monthly subscription",
