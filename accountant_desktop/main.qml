@@ -4,6 +4,7 @@ import QtQuick.Layouts 1.0
 import QtQuick.Window 2.0
 
 ApplicationWindow {
+    id: root
     visible: true
     width: 800//Screen.desktopAvailableWidth
     height: 600//Screen.desktopAvailableHeight
@@ -19,6 +20,33 @@ ApplicationWindow {
         id: transactionTable
         anchors.fill: parent
         model: transactionListMockModel
+
+        onDoubleClicked: {
+            var transaction = transactionListMockModel.get(row)
+            transactionView.withdrawalAccount = transaction.from_account
+            transactionView.depositAccount = transaction.to_account
+            transactionView.calendarDate = new Date(transaction.date)
+            transactionView.transactionAmount = transaction.amount
+
+            popup.open()
+        }
+    }
+
+    Popup {
+        id: popup
+        modal: true
+        focus: true
+        closePolicy: Popup.CloseOnPressOutside | Popup.CloseOnEscape
+
+        //width: transactionView.width
+        //height: transactionView.height
+
+        x: root.width / 2 - transactionView.width / 2
+        y: root.height / 2 - transactionView.height / 2
+
+        TransactionView {
+            id: transactionView
+        }
     }
 
     ListModel {
