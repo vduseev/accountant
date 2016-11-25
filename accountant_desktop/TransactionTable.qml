@@ -4,8 +4,6 @@ import QtQuick.Controls 1.4
 TableView {
     id: root
 
-    property var cellComponents: [calendarCellComponent, accountCellComponent, accountCellComponent, accountCellComponent, accountCellComponent]
-
     selectionMode: SelectionMode.ExtendedSelection
 
     TableViewColumn { role: "date"; title: "Date" }
