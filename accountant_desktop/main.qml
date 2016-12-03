@@ -26,7 +26,7 @@ ApplicationWindow {
                 onClicked: {
                     var row = transactionTable.currentRow
                     if (row > -1) {
-                        var transaction = transactionListMockModel.get(row)
+                        var transaction = transactionListModel.get(row)
                         popup.openToEditExistingTransaction(transaction, row)
                     }
                 }
@@ -41,10 +41,10 @@ ApplicationWindow {
     TransactionTable {
         id: transactionTable
         anchors.fill: parent
-        model: transactionListMockModel
+        model: transactionListModel
 
         onDoubleClicked: {
-            var transaction = transactionListMockModel.get(row)
+            var transaction = transactionListModel.get(row)
             popup.openToEditExistingTransaction(transaction, row)
         }
     }
@@ -66,10 +66,10 @@ ApplicationWindow {
 
             onSubmit: {
                 if (modelIndex === -1) {
-                    root.addTransactionToModel(transaction)
+                    transactionListModel.addTransaction(transaction)
                 }
                 else {
-                    root.updateTransactionInModel(transaction, modelIndex)
+                    transactionListModel.updateTransaction(transaction, modelIndex)
                 }
                 popup.close()
             }
@@ -95,7 +95,16 @@ ApplicationWindow {
     }
 
     ListModel {
-        id: transactionListMockModel
+        id: transactionListModel
+
+        function updateTransaction(transaction, modelIndex) {
+            transactionListModel.set(modelIndex, transaction)
+        }
+
+        function addTransaction(transaction) {
+            transactionListModel.append(transaction)
+        }
+
         Component.onCompleted: lazyDataLoader.sendMessage('load these damn items')
     }
 
@@ -106,15 +115,7 @@ ApplicationWindow {
         onMessage: {
             var listModelItem = messageObject
             listModelItem.date = messageObject.date.toLocaleString(Locale.ShortFormat)
-            transactionListMockModel.append(listModelItem)
+            transactionListModel.append(listModelItem)
         }
-    }
-
-    function updateTransactionInModel(transaction, modelIndex) {
-        transactionListMockModel.set(modelIndex, transaction)
-    }
-
-    function addTransactionToModel(transaction) {
-        transactionListMockModel.append(transaction)
     }
 }
