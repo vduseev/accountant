@@ -23,6 +23,13 @@ ApplicationWindow {
             Item { Layout.fillWidth: true }
             ToolButton {
                 text: "Edit"
+                onClicked: {
+                    var row = transactionTable.currentRow
+                    if (row > -1) {
+                        var transaction = transactionListMockModel.get(row)
+                        popup.openToEditExistingTransaction(transaction, row)
+                    }
+                }
             }
             Item { Layout.fillWidth: true }
             ToolButton {
