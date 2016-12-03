@@ -11,12 +11,6 @@ ApplicationWindow {
     height: 600//Screen.desktopAvailableHeight
     title: qsTr("The Accountant")
 
-//    TransactionList {
-//        id: transactionList
-//        anchors.fill: parent
-//        model: transactionListMockModel
-//    }
-
     header: ToolBar {
         RowLayout {
             anchors.fill: parent
