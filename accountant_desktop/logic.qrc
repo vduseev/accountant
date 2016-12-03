@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/">
+        <file>lazyLoader.js</file>
+    </qresource>
+</RCC>

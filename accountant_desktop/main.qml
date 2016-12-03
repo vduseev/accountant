@@ -89,19 +89,17 @@ ApplicationWindow {
 
     ListModel {
         id: transactionListMockModel
-        Component.onCompleted: loadMockData()
+        Component.onCompleted: lazyDataLoader.sendMessage('load these damn items')
     }
 
-    function loadMockData() {
-        for (var i = 1; i < 200; i++) {
-            transactionListMockModel.append({
-                "date": new Date("November " + (i % 30 + 1) + ", 2016 03:24:00").toLocaleString(Locale.ShortFormat),
-                "from_account": "ING Visa",
-                "to_account": "JetBrains",
-                "description": "Monthly subscription",
-                "amount": Math.round((Math.random()-0.5) * i) + 546.38 + i - i/10,
-                "cur": "PLN"
-            })
+    WorkerScript {
+        id: lazyDataLoader
+        source: "lazyLoader.js"
+
+        onMessage: {
+            var listModelItem = messageObject
+            listModelItem.date = messageObject.date.toLocaleString(Locale.ShortFormat)
+            transactionListMockModel.append(listModelItem)
         }
     }
 
