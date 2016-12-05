@@ -2,162 +2,155 @@ import QtQuick 2.0
 import QtQuick.Controls 1.4 as OldControls
 import QtQuick.Controls 2.0
 import QtQml 2.2
+import QtQuick.Layouts 1.1
 
-Rectangle {
+Item {
     id: root
 
-    width: transactionDateCalendar.x + transactionDateCalendar.width + 20
-    height: submitButton.y + submitButton.height + 20
-
-    //color: "white"
-    //radius: 10
+    property int textFieldHeight: 50
 
     signal submit(var transaction, var modelIndex)
     signal cancel()
 
     property int modelIndex: -1
+    width: 640
+    height: 440
 
-    Text {
-        id: fromAccountLabel
-        text: qsTr("From Account")
-        anchors.top: parent.top
-        anchors.topMargin: 20
-        anchors.left: parent.left
-        anchors.leftMargin: 20
-        font.pixelSize: 12
-    }
+    ColumnLayout {
+        id: mainLayoutColumn
 
-    TextField {
-        id: fromAccountTextField
-        width: 253
-        height: 40
-        placeholderText: "Specify withdrawal account..."
-        anchors.left: parent.left
-        anchors.leftMargin: 20
-        anchors.top: fromAccountLabel.bottom
-        anchors.topMargin: 5
-    }
+        spacing: 20
+        anchors {
+            fill: parent
+            margins: 10
+        }
 
-    Text {
-        id: toAccountLabel
-        text: qsTr("To Account")
-        anchors.left: parent.left
-        anchors.leftMargin: 20
-        anchors.top: fromAccountTextField.bottom
-        anchors.topMargin: 20
-        font.pixelSize: 12
-    }
+        RowLayout {
+            id: textFieldsAndDateTimeRow
+            spacing: 20
+            width: parent.width
 
-    TextField {
-        id: toAccountTextField
-        width: 253
-        height: 40
-        placeholderText: "Specify deposit account..."
-        anchors.left: parent.left
-        anchors.leftMargin: 20
-        anchors.top: toAccountLabel.bottom
-        anchors.topMargin: 5
-    }
+            ColumnLayout {
+                id: textFieldsColumn
+                spacing: 10
 
-    Text {
-        id: transactionAmountLabel
-        text: qsTr("Transaction Amount")
-        anchors.left: parent.left
-        anchors.leftMargin: 20
-        anchors.top: toAccountTextField.bottom
-        anchors.topMargin: 20
-        font.pixelSize: 12
-    }
+                LabeledTextField {
+                    id: fromAccount
+                    labelText: qsTr("From Account")
+                    placeholderText: qsTr("Specify withdrawal account...")
+                    height: textFieldHeight
+                    Layout.fillWidth: true
+                }
 
-    TextField {
-        id: transactionAmountTextField
-        width: 162
-        height: 40
-        anchors.top: transactionAmountLabel.bottom
-        anchors.topMargin: 5
-        anchors.left: parent.left
-        anchors.leftMargin: 20
-        placeholderText: qsTr("Specify amount...")
-    }
+                LabeledTextField {
+                    id: toAccount
+                    labelText: qsTr("To Account")
+                    placeholderText: qsTr("Specify deposit account...")
+                    height: textFieldHeight
+                    Layout.fillWidth: true
+                }
 
-    Text {
-        id: transactionDateLabel
-        text: qsTr("Transaction Date")
-        anchors.top: parent.top
-        anchors.topMargin: 20
-        anchors.left: fromAccountTextField.right
-        anchors.leftMargin: 20
-        font.pixelSize: 12
-    }
+                LabeledAmountCurrencyField {
+                    id: paymentAmount
+                    labelText: qsTr("Payment Amount")
+                    amountPlaceholderText: "0.00"
+                    currencyPlaceholderText: "USD"
+                    height: textFieldHeight
+                    Layout.fillWidth: true
+                }
 
-    OldControls.Calendar {
-        id: transactionDateCalendar
-        anchors.top: transactionDateLabel.bottom
-        anchors.topMargin: 5
-        anchors.left: fromAccountTextField.right
-        anchors.leftMargin: 20
-    }
+                LabeledAmountCurrencyField {
+                    id: blockedAmount
+                    labelText: qsTr("Blocked Amount")
+                    amountPlaceholderText: "0.00"
+                    currencyPlaceholderText: "USD"
+                    height: textFieldHeight
+                    Layout.fillWidth: true
+                }
 
-    TextField {
-        id: transactionCurrencyTextField
-        anchors.left: transactionAmountTextField.right
-        anchors.top: transactionAmountTextField.top
-        anchors.right: toAccountTextField.right
-        placeholderText: "USD"
-        //model: ["USD", "EUR", "PLN", "RUB"]
-    }
+                LabeledAmountCurrencyField {
+                    id: actualAmount
+                    labelText: qsTr("Actual Amount")
+                    amountPlaceholderText: "0.00"
+                    currencyPlaceholderText: "USD"
+                    height: textFieldHeight
+                    Layout.fillWidth: true
+                }
+            }
 
-    Text {
-        id: descriptionLabel
-        text: qsTr("Description")
-        anchors.top: transactionAmountTextField.bottom
-        anchors.topMargin: 40
-        anchors.leftMargin: 20
-        anchors.left: parent.left
-        font.pixelSize: 12
-    }
+            ColumnLayout {
+                id: dateTimeColumn
+                spacing: 5
 
-    TextArea {
-        id: transactionDescriptionTextArea
-        height: 119
-        anchors.right: transactionDateCalendar.right
-        anchors.rightMargin: 0
-        placeholderText: "Transaction description..."
-        anchors.left: parent.left
-        anchors.leftMargin: 20
-        anchors.top: descriptionLabel.bottom
-        anchors.topMargin: 5
-    }
+                Layout.alignment: Qt.AlignTop
 
-    Button {
-        id: submitButton
-        width: 100
-        height: 30
-        text: qsTr("Submit")
-        anchors.left: parent.left
-        anchors.leftMargin: 20
-        anchors.top: transactionDescriptionTextArea.bottom
-        anchors.topMargin: 20
-        onClicked: {
-            var transaction = getTransactionFromFields()
-            submit(transaction, modelIndex)
+                Text {
+                    id: transactionDateLabel
+                    text: qsTr("Transaction Date")
+                }
+
+                OldControls.Calendar {
+                    id: transactionDateCalendar
+                }
+            }
+        }
+
+
+        ColumnLayout {
+            id: descriptionColumn
+            spacing: 5
+
+            Layout.fillHeight: true
+
+            Text {
+                id: descriptionLabel
+                text: qsTr("Description")
+            }
+
+            TextArea {
+                id: transactionDescriptionTextArea
+                Layout.preferredHeight: 55
+                Layout.minimumHeight: 20
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                placeholderText: "Transaction description..."
+                background: Rectangle {
+                    border.width: 1
+                    border.color: "gray"
+                }
+            }
+        }
+
+        RowLayout {
+            id: dialogButtonsRow
+            spacing: 10
+            width: parent.width
+
+            Button {
+                id: submitButton
+                width: 100
+                height: 30
+                text: qsTr("Submit")
+                onClicked: {
+                    var transaction = getTransactionFromFields()
+                    submit(transaction, modelIndex)
+                }
+            }
+
+            Button {
+                id: cancelButton
+                width: 100
+                height: 30
+                text: qsTr("Cancel")
+                onClicked: {
+                    cancel()
+                }
+            }
+
+            Item { Layout.fillWidth: true }
         }
     }
 
-    Button {
-        id: cancelButton
-        y: 4
-        width: 100
-        height: 30
-        text: qsTr("Cancel")
-        anchors.left: submitButton.right
-        anchors.leftMargin: 20
-        anchors.topMargin: 20
-        anchors.top: transactionDescriptionTextArea.bottom
-        onClicked: {
-            cancel()
-        }
-    }
 
     function setupTransactionView(transaction, modelIndex) {
         setFieldsUsingExistingTransaction(transaction)
@@ -171,30 +164,51 @@ Rectangle {
 
     function setFieldsUsingExistingTransaction(transaction) {
         transactionDateCalendar.selectedDate = Date.fromLocaleString(Qt.locale(), transaction.date, Locale.ShortFormat)
-        fromAccountTextField.text = transaction.from_account
-        toAccountTextField.text = transaction.to_account
+
+        fromAccount.text    = transaction.from_account
+        toAccount.text      = transaction.to_account
+
+        paymentAmount.amount    = transaction.payment_amount
+        paymentAmount.currency  = transaction.payment_currency
+        blockedAmount.amount    = transaction.blocked_amount
+        blockedAmount.currency  = transaction.blocked_currency
+        actualAmount.amount     = transaction.actual_amount
+        actualAmount.currency   = transaction.actual_currency
+
         transactionDescriptionTextArea.text = transaction.description
-        transactionAmountTextField.text = transaction.amount
-        transactionCurrencyTextField.text = transaction.cur
     }
 
     function cleanUpFields() {
         transactionDateCalendar.selectedDate = new Date()
-        fromAccountTextField.text = ""
-        toAccountTextField.text = ""
+
+        fromAccount.text        = ""
+        toAccount.text          = ""
+
+        paymentAmount.amount    = ""
+        paymentAmount.currency  = ""
+        blockedAmount.amount    = ""
+        blockedAmount.currency  = ""
+        actualAmount.amount     = ""
+        actualAmount.currency   = ""
+
         transactionDescriptionTextArea.text = ""
-        transactionAmountTextField.text = ""
-        transactionCurrencyTextField.text = ""
     }
 
     function getTransactionFromFields() {
         var transaction = {
             "date": transactionDateCalendar.selectedDate.toLocaleString(Locale.ShortFormat),
-            "from_account": fromAccountTextField.text,
-            "to_account": toAccountTextField.text,
-            "description": transactionDescriptionTextArea.text,
-            "amount": parseFloat(transactionAmountTextField.text),
-            "cur": transactionCurrencyTextField.text
+
+            "from_account":     fromAccount.text,
+            "to_account":       toAccount.text,
+
+            "payment_amount":   parseFloat(paymentAmount.amount),
+            "payment_currency": paymentAmount.currency,
+            "blocked_amount":   parseFloat(blockedAmount.amount),
+            "blocked_currency": blockedAmount.currency,
+            "actual_amount":    parseFloat(actualAmount.amount),
+            "actual_currency":  actualAmount.currency,
+
+            "description": transactionDescriptionTextArea.text
         }
         return transaction
     }

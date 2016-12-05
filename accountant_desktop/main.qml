@@ -14,13 +14,16 @@ ApplicationWindow {
     header: ToolBar {
         RowLayout {
             anchors.fill: parent
+
             ToolButton {
                 text: "New"
                 onClicked: {
                     popup.openToCreateNewTransaction()
                 }
             }
+
             Item { Layout.fillWidth: true }
+
             ToolButton {
                 text: "Edit"
                 onClicked: {
@@ -31,7 +34,9 @@ ApplicationWindow {
                     }
                 }
             }
+
             Item { Layout.fillWidth: true }
+
             ToolButton {
                 text: "Delete"
             }
@@ -55,11 +60,10 @@ ApplicationWindow {
         focus: true
         closePolicy: Popup.CloseOnPressOutside | Popup.CloseOnEscape
 
-        //width: transactionView.width
-        //height: transactionView.height
-
         x: root.width / 2 - transactionView.width / 2
         y: root.height / 2 - transactionView.height / 2
+        contentWidth: transactionView.width
+        contentHeight: transactionView.height
 
         TransactionView {
             id: transactionView
@@ -116,6 +120,7 @@ ApplicationWindow {
             var listModelItem = messageObject
             listModelItem.date = messageObject.date.toLocaleString(Locale.ShortFormat)
             transactionListModel.append(listModelItem)
+            transactionTable.resizeColumnsToContents()
         }
     }
 }

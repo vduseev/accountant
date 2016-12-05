@@ -6,5 +6,8 @@
         <file>CalendarField.qml</file>
         <file>TransactionTable.qml</file>
         <file>TransactionView.qml</file>
+        <file>AccountView.qml</file>
+        <file>LabeledTextField.qml</file>
+        <file>LabeledAmountCurrencyField.qml</file>
     </qresource>
 </RCC>

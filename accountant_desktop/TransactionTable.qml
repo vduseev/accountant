@@ -6,11 +6,19 @@ TableView {
 
     selectionMode: SelectionMode.ExtendedSelection
 
-    TableViewColumn { role: "date"; title: "Date" }
-    TableViewColumn { role: "from_account"; title: "From" }
-    TableViewColumn { role: "to_account"; title: "To" }
-    TableViewColumn { role: "description"; title: "Description" }
-    TableViewColumn { role: "amount"; title: "Amount" }
+    TableViewColumn { role: "date";             title: "Date" }
+
+    TableViewColumn { role: "from_account";     title: "From" }
+    TableViewColumn { role: "to_account";       title: "To" }
+
+    TableViewColumn { role: "payment_amount";   title: "Payment Amount" }
+    TableViewColumn { role: "payment_currency"; title: "Cur" }
+    TableViewColumn { role: "blocked_amount";   title: "Blocked Amount" }
+    TableViewColumn { role: "blocked_currency"; title: "Cur" }
+    TableViewColumn { role: "actual_amount";    title: "Actual Amount" }
+    TableViewColumn { role: "actual_currency";  title: "Cur" }
+
+    TableViewColumn { role: "description";      title: "Description" }
 
 //    itemDelegate: Component {
 //        Loader {
