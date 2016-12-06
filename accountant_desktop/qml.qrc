@@ -9,5 +9,6 @@
         <file>AccountView.qml</file>
         <file>LabeledTextField.qml</file>
         <file>LabeledAmountCurrencyField.qml</file>
+        <file>PopupView.qml</file>
     </qresource>
 </RCC>

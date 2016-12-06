@@ -22,7 +22,7 @@ ApplicationWindow {
                 }
             }
 
-            Item { Layout.fillWidth: true }
+            //Item { width: 10 }
 
             ToolButton {
                 text: "Edit"
@@ -35,11 +35,13 @@ ApplicationWindow {
                 }
             }
 
-            Item { Layout.fillWidth: true }
+            //Item { width: 10 }
 
             ToolButton {
                 text: "Delete"
             }
+
+            Item { Layout.fillWidth: true }
         }
     }
 
@@ -54,43 +56,32 @@ ApplicationWindow {
         }
     }
 
-    Popup {
+    PopupView {
         id: popup
-        modal: true
-        focus: true
-        closePolicy: Popup.CloseOnPressOutside | Popup.CloseOnEscape
 
-        x: root.width / 2 - transactionView.width / 2
-        y: root.height / 2 - transactionView.height / 2
-        contentWidth: transactionView.width
-        contentHeight: transactionView.height
+        x: root.width / 2 - width / 2
+        y: root.height / 2 - height / 2
 
-        TransactionView {
-            id: transactionView
-
-            onSubmit: {
-                if (modelIndex === -1) {
-                    transactionListModel.addTransaction(transaction)
-                }
-                else {
-                    transactionListModel.updateTransaction(transaction, modelIndex)
-                }
-                popup.close()
+        onSubmitTransaction: {
+            if (modelIndex === -1) {
+                transactionListModel.addTransaction(transaction)
             }
-
-            onCancel: {
-                popup.close()
+            else {
+                transactionListModel.updateTransaction(transaction, modelIndex)
             }
+            popup.popStack()
         }
 
-        function openToCreateNewTransaction() {
-            transactionView.clearTransactionView()
-            popup.open()
+        onCancelTransaction: {
+            popup.popStack()
         }
 
-        function openToEditExistingTransaction(transaction, modelIndex) {
-            transactionView.setupTransactionView(transaction, modelIndex)
-            popup.open()
+        onSubmitAccount: {
+
+        }
+
+        onCancelAccount: {
+            popup.popStack()
         }
     }
 
