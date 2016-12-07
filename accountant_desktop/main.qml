@@ -45,6 +45,7 @@ DesktopControls.ApplicationWindow {
         DesktopControls.Tab {
             id: transactionsTab
             title: qsTr("Transactions")
+
             TransactionTable {
                 id: transactionTable
                 //anchors.fill: parent
@@ -74,6 +75,7 @@ DesktopControls.ApplicationWindow {
         DesktopControls.Tab {
             id: accountsTab
             title: qsTr("Accounts")
+
             Item {
                 id: accountTable
             }
