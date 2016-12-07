@@ -1,10 +1,10 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.0
-import QtQuick.Window 2.0
+import QtQuick.Window 2.2
 import QtQml 2.2
 
-Popup {
+Window {
     id: root
 
     signal submitTransaction(var transaction, var modelIndex)
@@ -12,9 +12,9 @@ Popup {
     signal submitAccount(var account, var modelIndex)
     signal cancelAccount()
 
-    modal: true
-    focus: true
-    closePolicy: Popup.CloseOnPressOutside | Popup.CloseOnEscape
+    //modal: true
+    //focus: true
+    //closePolicy: Popup.CloseOnPressOutside | Popup.CloseOnEscape
 
     function popStack() {
         if (stackView.depth > 1) {
@@ -24,12 +24,12 @@ Popup {
         }
     }
 
-    onClosed: {
-        stackView.clear()
-    }
+//    onClosing: {
+//        stackView.clear()
+//    }
 
-    contentWidth: stackView.width
-    contentHeight: stackView.height
+    width: stackView.width
+    height: stackView.height
 
     StackView {
         id: stackView
@@ -93,13 +93,13 @@ Popup {
     function openToCreateNewTransaction() {
         stackView.push(transactionViewComponent)
         stackView.currentItem.clearTransactionView()
-        root.open()
+        root.show()
     }
 
     function openToEditExistingTransaction(transaction, modelIndex) {
         stackView.push(transactionViewComponent)
         stackView.currentItem.setupTransactionView(transaction, modelIndex)
-        root.open()
+        root.show()
     }
 
     Component {
