@@ -77,6 +77,8 @@ ApplicationWindow {
             // Unless loader loads its content we can't address the methods inside the
             // content as we do in the next line.
             transactionViewTab.item.setupView(model, modelIndex, transaction)
+            // Switch to opened tab. Use last index since added tab is always the last.
+            tabView.currentIndex = tabView.count - 1
         }
     }
 }
