@@ -7,6 +7,10 @@ import QtQuick.Layouts 1.1
 Rectangle {
     id: transactionView
 
+    // model is set when TransactionView instantiated from
+    // TransactionTable, so it is shared between TransactionTable
+    // and TransactionView.
+    // If TransactionTable will be closed model will be preserved.
     property ListModel model
     property int modelIndex: -1
     property int textFieldHeight: 50
