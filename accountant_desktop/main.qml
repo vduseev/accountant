@@ -74,8 +74,6 @@ ApplicationWindow {
         } else {
             transactionViewTab.active = true
             transactionViewTab.item.setupView(model, modelIndex, transaction)
-            //transactionViewTab.item.modelIndex = 1
-            //transactionViewTab.item.submit.connect(fun)
         }
     }
 }
