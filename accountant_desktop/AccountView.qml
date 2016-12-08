@@ -88,21 +88,21 @@ Item {
 
 
     function setupView(account, modelIndex) {
-        setFields(account)
+        __setFields(account)
         root.modelIndex = modelIndex
     }
 
     function clearView() {
-        cleanUpFields()
+        __cleanUpFields()
         root.modelIndex = -1
     }
 
-    function setFields(account) {
+    function __setFields(account) {
         accountName.text        = transaction.account_name
         accountDescription.text = transaction.account_description
     }
 
-    function cleanUpFields() {
+    function __cleanUpFields() {
         accountName.text        = ""
         accountDescription.text = ""
     }
