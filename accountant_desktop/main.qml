@@ -73,6 +73,9 @@ ApplicationWindow {
             console.log("Error creating transactionView component")
         } else {
             transactionViewTab.active = true
+            // Tab needs to be activated first, because it's a Loader.
+            // Unless loader loads its content we can't address the methods inside the
+            // content as we do in the next line.
             transactionViewTab.item.setupView(model, modelIndex, transaction)
         }
     }
