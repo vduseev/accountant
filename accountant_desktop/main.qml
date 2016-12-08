@@ -61,10 +61,6 @@ ApplicationWindow {
         }
     }
 
-    function fun(modelIndex, transaction) {
-        console.log("Clicked: " + modelIndex)
-    }
-
     function openNewTransactionViewTabToEdit(model, modelIndex, transaction) {
         var transactionViewComponent = Qt.createComponent("TransactionView.qml")
         var transactionViewTab = tabView.addTab(qsTr("Edit Transaction"), transactionViewComponent)
