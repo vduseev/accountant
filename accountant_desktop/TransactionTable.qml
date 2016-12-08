@@ -6,6 +6,10 @@ TableView {
     id: transactionTable
 
     selectionMode: SelectionMode.ExtendedSelection
+
+    // ListModel belongs to TransactionTable.
+    // It is instantiated together with TransactionTable and populated with
+    // WorkerScript inside it.
     model: ListModel { }
 
     Component.onCompleted: lazyDataLoader.sendMessage("Load the data")
