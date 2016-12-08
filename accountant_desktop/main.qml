@@ -5,6 +5,9 @@ import QtQuick.Window 2.0
 ApplicationWindow {
     id: mainApplicationWindow
     visible: true
+
+    /* Window is automatically resized to to maximized state.
+       It feels more comfortable to use. */
     width: Screen.desktopAvailableWidth
     height: Screen.desktopAvailableHeight
 
