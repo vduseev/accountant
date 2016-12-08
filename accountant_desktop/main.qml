@@ -1,125 +1,78 @@
 import QtQuick 2.7
-import QtQuick.Controls 1.4 as DesktopControls
-import QtQuick.Controls 2.0 as MobileControls
-import QtQuick.Layouts 1.3
+import QtQuick.Controls 1.4
 import QtQuick.Window 2.0
-import QtQml 2.2
 
-DesktopControls.ApplicationWindow {
-    id: root
+ApplicationWindow {
+    id: mainApplicationWindow
     visible: true
-    width: 1000//Screen.desktopAvailableWidth
-    height: 600//Screen.desktopAvailableHeight
+    width: Screen.desktopAvailableWidth
+    height: Screen.desktopAvailableHeight
 
     title: qsTr("The Accountant")
 
-    menuBar: DesktopControls.MenuBar {
-        DesktopControls.Menu {
+    Component.onCompleted: {
+        openNewTransactionTableTab()
+    }
+
+    menuBar: MenuBar {
+        Menu {
             title: qsTr("Transaction")
-            DesktopControls.MenuItem {
+
+            MenuItem {
                 text: qsTr("Create new transaction...")
                 onTriggered: {
-                    popup.openToCreateNewTransaction()
+                    //popup.openToCreateNewTransaction()
                 }
             }
-            DesktopControls.MenuItem {
+
+            MenuItem {
                 text: qsTr("Edit transaction...")
                 onTriggered: {
                     var row = 0//transactionTable.currentRow
                     if (row > -1) {
                         var transaction = transactionListModel.get(row)
-                        popup.openToEditExistingTransaction(transaction, row)
+                        //popup.openToEditExistingTransaction(transaction, row)
                     }
                 }
             }
         }
-        DesktopControls.Menu {
+
+        Menu {
             title: qsTr("Account")
         }
     }
 
-    DesktopControls.TabView {
+    TabView {
         id: tabView
         anchors.fill: parent
+    }
 
-        DesktopControls.Tab {
-            id: transactionsTab
-            title: qsTr("Transactions")
+    function openNewTransactionTableTab() {
+        var transactionTableComponent = Qt.createComponent("TransactionTable.qml")
+        var transactionTableTab = tabView.addTab(qsTr("Transactions"), transactionTableComponent)
 
-            TransactionTable {
-                id: transactionTable
-                //anchors.fill: parent
-                model: transactionListModel
-
-                onDoubleClicked: {
-                    var transaction = transactionListModel.get(row)
-                    popup.openToEditExistingTransaction(transaction, row)
-                }
-
-                Component.onCompleted: lazyDataLoader.sendMessage('load these damn items')
-
-                WorkerScript {
-                    id: lazyDataLoader
-                    source: "lazyLoader.js"
-
-                    onMessage: {
-                        var listModelItem = messageObject
-                        listModelItem.date = messageObject.date.toLocaleString(Locale.ShortFormat)
-                        transactionListModel.append(listModelItem)
-                        transactionTable.resizeColumnsToContents()
-                    }
-                }
-            }
-        }
-
-        DesktopControls.Tab {
-            id: accountsTab
-            title: qsTr("Accounts")
-
-            Item {
-                id: accountTable
-            }
+        if (transactionTableTab == null) {
+            console.log("Error creating TransactionTable component")
+        } else {
+            transactionTableTab.item.doubleClickedOnTransaction.connect(openNewTransactionViewTabToEdit)
         }
     }
 
-    PopupView {
-        id: popup
-
-        x: root.width / 2 - width / 2
-        y: root.height / 2 - height / 2
-
-        onSubmitTransaction: {
-            if (modelIndex === -1) {
-                transactionListModel.addTransaction(transaction)
-            }
-            else {
-                transactionListModel.updateTransaction(transaction, modelIndex)
-            }
-            popup.popStack()
-        }
-
-        onCancelTransaction: {
-            popup.popStack()
-        }
-
-        onSubmitAccount: {
-
-        }
-
-        onCancelAccount: {
-            popup.popStack()
-        }
+    function fun(modelIndex, transaction) {
+        console.log("Clicked: " + modelIndex)
     }
 
-    ListModel {
-        id: transactionListModel
+    function openNewTransactionViewTabToEdit(model, modelIndex, transaction) {
+        var transactionViewComponent = Qt.createComponent("TransactionView.qml")
+        var transactionViewTab = tabView.addTab(qsTr("Edit Transaction"), transactionViewComponent)
 
-        function updateTransaction(transaction, modelIndex) {
-            transactionListModel.set(modelIndex, transaction)
-        }
-
-        function addTransaction(transaction) {
-            transactionListModel.append(transaction)
+        if (transactionViewTab === null) {
+            console.log("Error creating transactionView component")
+        } else {
+            transactionViewTab.active = true
+            transactionViewTab.item.setupView(model, modelIndex, transaction)
+            //transactionViewTab.item.modelIndex = 1
+            //transactionViewTab.item.submit.connect(fun)
         }
     }
 }

@@ -10,8 +10,8 @@ WorkerScript.onMessage = function(message) {
             "payment_currency":     "PLN",
             "blocked_amount":       Math.round((Math.random()-0.5) * i) + 546.38 + i - i/10,
             "blocked_currency":     "PLN",
-            "actual_amount":       Math.round((Math.random()-0.5) * i) + 546.38 + i - i/10,
-            "actual_currency":     "PLN",
+            "actual_amount":        Math.round((Math.random()-0.5) * i) + 546.38 + i - i/10,
+            "actual_currency":      "PLN",
 
             "description": "Monthly subscription"
         }

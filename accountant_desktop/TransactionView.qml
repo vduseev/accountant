@@ -4,15 +4,32 @@ import QtQuick.Controls 2.0
 import QtQml 2.2
 import QtQuick.Layouts 1.1
 
-Item {
-    id: root
+Rectangle {
+    id: transactionView
 
+    property ListModel model
+    property int modelIndex: -1
     property int textFieldHeight: 50
 
-    signal submit(var transaction, var modelIndex)
+    signal submit(int modelIndex, var transaction)
     signal cancel()
 
-    property int modelIndex: -1
+    function setupView(model, modelIndex, transaction) {
+        transactionView.model = model
+        transactionView.__setFieldsUsingExistingTransaction(transaction)
+        transactionView.modelIndex = modelIndex
+    }
+
+    function clearView() {
+        transactionView.__cleanUpFields()
+        transactionView.modelIndex = -1
+    }
+
+    function fun() {
+        console.log("fun")
+    }
+
+    color: "white"
     width: 640
     height: 440
 
@@ -132,8 +149,14 @@ Item {
                 height: 30
                 text: qsTr("Submit")
                 onClicked: {
-                    var transaction = getTransactionFromFields()
-                    submit(transaction, modelIndex)
+                    var transaction = __getTransactionFromFields()
+                    if (modelIndex == -1) {
+                        transactionView.model.append()
+                    } else {
+                        transactionView.model.set(modelIndex, transaction)
+                    }
+
+                    submit(modelIndex, transaction)
                 }
             }
 
@@ -151,18 +174,7 @@ Item {
         }
     }
 
-
-    function setupTransactionView(transaction, modelIndex) {
-        setFieldsUsingExistingTransaction(transaction)
-        root.modelIndex = modelIndex
-    }
-
-    function clearTransactionView() {
-        cleanUpFields()
-        root.modelIndex = -1
-    }
-
-    function setFieldsUsingExistingTransaction(transaction) {
+    function __setFieldsUsingExistingTransaction(transaction) {
         transactionDateCalendar.selectedDate = Date.fromLocaleString(Qt.locale(), transaction.date, Locale.ShortFormat)
 
         fromAccount.text    = transaction.from_account
@@ -178,7 +190,7 @@ Item {
         transactionDescriptionTextArea.text = transaction.description
     }
 
-    function cleanUpFields() {
+    function __cleanUpFields() {
         transactionDateCalendar.selectedDate = new Date()
 
         fromAccount.text        = ""
@@ -194,7 +206,7 @@ Item {
         transactionDescriptionTextArea.text = ""
     }
 
-    function getTransactionFromFields() {
+    function __getTransactionFromFields() {
         var transaction = {
             "date": transactionDateCalendar.selectedDate.toLocaleString(Locale.ShortFormat),
 
