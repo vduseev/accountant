@@ -7,11 +7,17 @@ import QtQuick.Layouts 1.1
 Rectangle {
     id: transactionView
 
-    // model is set when TransactionView instantiated from
+    // model is set when TransactionView is instantiated from
     // TransactionTable, so it is shared between TransactionTable
     // and TransactionView.
     // If TransactionTable will be closed model will be preserved.
     property ListModel model
+
+    // modelIndex is set when TransactionView is instantiated.
+    // It is used when submit signal is emitted as parameter to signal.
+    // Also it is used in __updateModelWithTransaction function as part
+    // of the logic to determine whether we add a new item to the model
+    // or update an existing one.
     property int modelIndex: -1
     property int textFieldHeight: 50
 
@@ -154,12 +160,7 @@ Rectangle {
                 text: qsTr("Submit")
                 onClicked: {
                     var transaction = __getTransactionFromFields()
-                    if (modelIndex == -1) {
-                        transactionView.model.append()
-                    } else {
-                        transactionView.model.set(modelIndex, transaction)
-                    }
-
+                    __updateModelWithTransaction(transaction)
                     submit(modelIndex, transaction)
                 }
             }
@@ -175,6 +176,14 @@ Rectangle {
             }
 
             Item { Layout.fillWidth: true }
+        }
+    }
+
+    function __updateModelWithTransaction(transaction) {
+        if (modelIndex == -1) {
+            transactionView.model.append()
+        } else {
+            transactionView.model.set(modelIndex, transaction)
         }
     }
 
