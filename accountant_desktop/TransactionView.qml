@@ -35,10 +35,6 @@ Rectangle {
         transactionView.modelIndex = -1
     }
 
-    function fun() {
-        console.log("fun")
-    }
-
     color: "white"
     width: 640
     height: 440
