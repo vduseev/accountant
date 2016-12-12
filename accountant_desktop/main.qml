@@ -24,7 +24,7 @@ ApplicationWindow {
             MenuItem {
                 text: qsTr("Create new transaction...")
                 onTriggered: {
-                    //popup.openToCreateNewTransaction()
+                    //openNewTransactionViewTabToAddTransaction()
                 }
             }
 
@@ -51,30 +51,48 @@ ApplicationWindow {
     }
 
     function openNewTransactionTableTab() {
-        var transactionTableComponent = Qt.createComponent("TransactionTable.qml")
-        var transactionTableTab = tabView.addTab(qsTr("Transactions"), transactionTableComponent)
+        var transactionTableTab =  addNewTab("TransactionTable.qml", qsTr("Transactions"))
 
-        if (transactionTableTab == null) {
-            console.log("Error creating TransactionTable component")
-        } else {
-            transactionTableTab.item.doubleClickedOnTransaction.connect(openNewTransactionViewTabToEdit)
+        if (transactionTableTab !== null) {
+            transactionTableTab.item.doubleClickedOnTransaction.connect(openNewTransactionViewTabToEditTransaction)
         }
     }
 
-    function openNewTransactionViewTabToEdit(model, modelIndex, transaction) {
-        var transactionViewComponent = Qt.createComponent("TransactionView.qml")
-        var transactionViewTab = tabView.addTab(qsTr("Edit Transaction"), transactionViewComponent)
+    function openNewTransactionViewTabToEditTransaction(model, modelIndex, transaction) {
+        var transactionViewTab = addNewTab("TransactionView.qml", qsTr("Edit Transaction"))
 
-        if (transactionViewTab === null) {
-            console.log("Error creating transactionView component")
-        } else {
-            transactionViewTab.active = true
+        if (transactionViewTab !== null) {
             // Tab needs to be activated first, because it's a Loader.
             // Unless loader loads its content we can't address the methods inside the
             // content as we do in the next line.
+            transactionViewTab.active = true
             transactionViewTab.item.setupView(model, modelIndex, transaction)
             // Switch to opened tab. Use last index since added tab is always the last.
             tabView.currentIndex = tabView.count - 1
         }
+    }
+
+    function openNewTransactionViewTabToAddTransaction(model) {
+        var transactionViewTab = addNewTab("TransactionView.qml", qsTr("Add Transaction"))
+
+        if (transactionViewTab !== null) {
+            // Tab needs to be activated first, because it's a Loader.
+            // Unless loader loads its content we can't address the methods inside the
+            // content as we do in the next line.
+            transactionViewTab.active = true
+            // Switch to opened tab. Use last index since added tab is always the last.
+            tabView.currentIndex = tabView.count - 1
+        }
+    }
+
+    function addNewTab(componentSourceName, title) {
+        var component = Qt.createComponent(componentSourceName)
+        var tab = tabView.addTab(title, component)
+
+        if (tab === null) {
+            console.log("Error creating " + componentSourceName + " component")
+        }
+
+        return tab
     }
 }
