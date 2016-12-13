@@ -26,9 +26,9 @@ Rectangle {
     signal submit(int modelIndex, var transaction)
     signal cancel()
 
-    function setupView(model, modelIndex) {
+    function setupView(modelIndex, model) {
         transactionView.model = model
-        if (modelIndex !== undefined) {
+        if (modelIndex !== -1) {
             var transaction = model.get(modelIndex)
             transactionView.modelIndex = modelIndex
             transactionView.__setFieldsUsingExistingTransaction(transaction)

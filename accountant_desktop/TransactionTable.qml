@@ -38,7 +38,7 @@ TableView {
 
     onDoubleClicked: {
         var transaction = model.get(row)
-        doubleClickedOnTransaction(model, row, transaction)
+        doubleClickedOnTransaction(row, model)
     }
 
     // date & time

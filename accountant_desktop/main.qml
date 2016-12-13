@@ -8,13 +8,14 @@ ApplicationWindow {
 
     /* Window is automatically resized to to maximized state.
        It feels more comfortable to use. */
-    width: Screen.desktopAvailableWidth
-    height: Screen.desktopAvailableHeight
+    //width: Screen.desktopAvailableWidth
+    //height: Screen.desktopAvailableHeight
 
     title: qsTr("The Accountant")
 
     Component.onCompleted: {
         openNewTransactionTableTab()
+        showMaximized()
     }
 
     menuBar: MenuBar {
@@ -37,7 +38,7 @@ ApplicationWindow {
                     var currentTab = tabView.getTab(tabView.currentIndex)
                     var model = currentTab.item.model
                     var row = currentTab.item.currentRow
-                    openNewTransactionViewTabToEditTransaction(model, row)
+                    openNewTransactionViewTabToEditTransaction(row, model)
                 }
                 Component.onCompleted: { enabled = Qt.binding(isTransactionSelected) }
             }
@@ -93,6 +94,7 @@ ApplicationWindow {
     }
 
     function openNewTransactionViewTabToEditTransaction(modelIndex, model) {
+        var currentTransactionTable = getCurrentTabItem()
         var transactionViewTab = addNewTab("TransactionView.qml", qsTr("Edit Transaction"), "transactionView")
 
         if (transactionViewTab !== null) {
@@ -100,16 +102,18 @@ ApplicationWindow {
             // Unless loader loads its content we can't address the methods inside the
             // content as we do in the next line.
             transactionViewTab.active = true
-            transactionViewTab.item.setupView(model, modelIndex)
+            transactionViewTab.item.setupView(modelIndex, model)
             // Switch to opened tab. Use last index since added tab is always the last.
             tabView.currentIndex = tabView.count - 1
 
             transactionViewTab.item.submit.connect(closeCurrentTab)
             transactionViewTab.item.cancel.connect(closeCurrentTab)
+            transactionViewTab.item.submit.connect(currentTransactionTable.resizeColumnsToContents)
         }
     }
 
     function openNewTransactionViewTabToAddTransaction(model) {
+        var currentTransactionTable = getCurrentTabItem()
         var transactionViewTab = addNewTab("TransactionView.qml", qsTr("Add Transaction"), "transactionView")
 
         if (transactionViewTab !== null) {
@@ -117,12 +121,13 @@ ApplicationWindow {
             // Unless loader loads its content we can't address the methods inside the
             // content as we do in the next line.
             transactionViewTab.active = true
-            transactionViewTab.item.setupView(model)
+            transactionViewTab.item.setupView(-1, model)
             // Switch to opened tab. Use last index since added tab is always the last.
             tabView.currentIndex = tabView.count - 1
 
             transactionViewTab.item.submit.connect(closeCurrentTab)
             transactionViewTab.item.cancel.connect(closeCurrentTab)
+            transactionViewTab.item.submit.connect(currentTransactionTable.resizeColumnsToContents)
         }
     }
 
