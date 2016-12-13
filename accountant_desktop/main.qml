@@ -24,19 +24,22 @@ ApplicationWindow {
             MenuItem {
                 text: qsTr("Create new transaction...")
                 onTriggered: {
-                    //openNewTransactionViewTabToAddTransaction()
+                    var currentTab = tabView.getTab(tabView.currentIndex)
+                    var model = currentTab.item.model
+                    openNewTransactionViewTabToAddTransaction(model)
                 }
+                Component.onCompleted: { enabled = Qt.binding(isCurrentTabTransactionTable) }
             }
 
             MenuItem {
                 text: qsTr("Edit transaction...")
                 onTriggered: {
-                    var row = 0//transactionTable.currentRow
-                    if (row > -1) {
-                        var transaction = transactionListModel.get(row)
-                        //popup.openToEditExistingTransaction(transaction, row)
-                    }
+                    var currentTab = tabView.getTab(tabView.currentIndex)
+                    var model = currentTab.item.model
+                    var row = currentTab.item.currentRow
+                    openNewTransactionViewTabToEditTransaction(model, row)
                 }
+                Component.onCompleted: { enabled = Qt.binding(isTransactionSelected) }
             }
         }
 
@@ -50,8 +53,39 @@ ApplicationWindow {
         anchors.fill: parent
     }
 
+    function isCurrentTabTransactionTable() {
+        var currentTabViewType = getCurrentTabViewType()
+        if (currentTabViewType !== undefined) {
+            return currentTabViewType === "transactionTable"
+        }
+        return false
+    }
+
+    function isTransactionSelected() {
+        if (isCurrentTabTransactionTable()) {
+            return getCurrentTabItem().currentRow > -1
+        }
+        return false;
+    }
+
+    function getCurrentTabItem() {
+        var currentTab = tabView.getTab(tabView.currentIndex)
+        if (currentTab !== undefined) {
+            return currentTab.item
+        }
+        return undefined
+    }
+
+    function getCurrentTabViewType() {
+        var currentItem = getCurrentTabItem()
+        if (currentItem !== undefined) {
+            return currentItem.viewType
+        }
+        return undefined
+    }
+
     function openNewTransactionTableTab() {
-        var transactionTableTab =  addNewTab("TransactionTable.qml", qsTr("Transactions"))
+        var transactionTableTab =  addNewTab("TransactionTable.qml", qsTr("Transactions"), "transactionTable")
 
         if (transactionTableTab !== null) {
             transactionTableTab.item.doubleClickedOnTransaction.connect(openNewTransactionViewTabToEditTransaction)
@@ -59,21 +93,21 @@ ApplicationWindow {
     }
 
     function openNewTransactionViewTabToEditTransaction(model, modelIndex, transaction) {
-        var transactionViewTab = addNewTab("TransactionView.qml", qsTr("Edit Transaction"))
+        var transactionViewTab = addNewTab("TransactionView.qml", qsTr("Edit Transaction"), "transactionView")
 
         if (transactionViewTab !== null) {
             // Tab needs to be activated first, because it's a Loader.
             // Unless loader loads its content we can't address the methods inside the
             // content as we do in the next line.
             transactionViewTab.active = true
-            transactionViewTab.item.setupView(model, modelIndex, transaction)
+            transactionViewTab.item.setupView(model, modelIndex)
             // Switch to opened tab. Use last index since added tab is always the last.
             tabView.currentIndex = tabView.count - 1
         }
     }
 
     function openNewTransactionViewTabToAddTransaction(model) {
-        var transactionViewTab = addNewTab("TransactionView.qml", qsTr("Add Transaction"))
+        var transactionViewTab = addNewTab("TransactionView.qml", qsTr("Add Transaction"), "transactionView")
 
         if (transactionViewTab !== null) {
             // Tab needs to be activated first, because it's a Loader.
@@ -85,7 +119,7 @@ ApplicationWindow {
         }
     }
 
-    function addNewTab(componentSourceName, title) {
+    function addNewTab(componentSourceName, title, tabType) {
         var component = Qt.createComponent(componentSourceName)
         var tab = tabView.addTab(title, component)
 

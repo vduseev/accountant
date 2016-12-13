@@ -5,6 +5,8 @@ import QtQml 2.2
 TableView {
     id: transactionTable
 
+    readonly property string viewType: "transactionTable"
+
     signal doubleClickedOnTransaction(ListModel model, int modelIndex, var transaction)
 
     function upsertTransaction(modelIndex, transaction) {

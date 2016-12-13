@@ -7,6 +7,8 @@ import QtQuick.Layouts 1.1
 Rectangle {
     id: transactionView
 
+    readonly property string viewType: "transactionView"
+
     // model is set when TransactionView is instantiated from
     // TransactionTable, so it is shared between TransactionTable
     // and TransactionView.
@@ -24,10 +26,13 @@ Rectangle {
     signal submit(int modelIndex, var transaction)
     signal cancel()
 
-    function setupView(model, modelIndex, transaction) {
+    function setupView(model, modelIndex) {
         transactionView.model = model
-        transactionView.__setFieldsUsingExistingTransaction(transaction)
-        transactionView.modelIndex = modelIndex
+        if (modelIndex !== undefined) {
+            var transaction = model.get(modelIndex)
+            transactionView.modelIndex = modelIndex
+            transactionView.__setFieldsUsingExistingTransaction(transaction)
+        }
     }
 
     function clearView() {
