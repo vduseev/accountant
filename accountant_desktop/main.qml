@@ -92,7 +92,7 @@ ApplicationWindow {
         }
     }
 
-    function openNewTransactionViewTabToEditTransaction(model, modelIndex, transaction) {
+    function openNewTransactionViewTabToEditTransaction(modelIndex, model) {
         var transactionViewTab = addNewTab("TransactionView.qml", qsTr("Edit Transaction"), "transactionView")
 
         if (transactionViewTab !== null) {
@@ -103,6 +103,9 @@ ApplicationWindow {
             transactionViewTab.item.setupView(model, modelIndex)
             // Switch to opened tab. Use last index since added tab is always the last.
             tabView.currentIndex = tabView.count - 1
+
+            transactionViewTab.item.submit.connect(closeCurrentTab)
+            transactionViewTab.item.cancel.connect(closeCurrentTab)
         }
     }
 
@@ -114,8 +117,12 @@ ApplicationWindow {
             // Unless loader loads its content we can't address the methods inside the
             // content as we do in the next line.
             transactionViewTab.active = true
+            transactionViewTab.item.setupView(model)
             // Switch to opened tab. Use last index since added tab is always the last.
             tabView.currentIndex = tabView.count - 1
+
+            transactionViewTab.item.submit.connect(closeCurrentTab)
+            transactionViewTab.item.cancel.connect(closeCurrentTab)
         }
     }
 
@@ -128,5 +135,10 @@ ApplicationWindow {
         }
 
         return tab
+    }
+
+    function closeCurrentTab() {
+        var currentIndex = tabView.currentIndex
+        tabView.removeTab(currentIndex)
     }
 }

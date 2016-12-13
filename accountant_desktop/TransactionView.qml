@@ -160,9 +160,7 @@ Rectangle {
                 height: 30
                 text: qsTr("Submit")
                 onClicked: {
-                    var transaction = __getTransactionFromFields()
-                    __updateModelWithTransaction(transaction)
-                    submit(modelIndex, transaction)
+                    __submitTransaction()
                 }
             }
 
@@ -172,7 +170,7 @@ Rectangle {
                 height: 30
                 text: qsTr("Cancel")
                 onClicked: {
-                    cancel()
+                    __cancelTransaction()
                 }
             }
 
@@ -180,9 +178,19 @@ Rectangle {
         }
     }
 
+    function __submitTransaction() {
+        var transaction = __getTransactionFromFields()
+        __updateModelWithTransaction(transaction)
+        submit(modelIndex, transaction)
+    }
+
+    function __cancelTransaction() {
+        cancel()
+    }
+
     function __updateModelWithTransaction(transaction) {
         if (modelIndex == -1) {
-            transactionView.model.append()
+            transactionView.model.append(transaction)
         } else {
             transactionView.model.set(modelIndex, transaction)
         }

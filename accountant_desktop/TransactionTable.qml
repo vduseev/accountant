@@ -7,7 +7,7 @@ TableView {
 
     readonly property string viewType: "transactionTable"
 
-    signal doubleClickedOnTransaction(ListModel model, int modelIndex, var transaction)
+    signal doubleClickedOnTransaction(int modelIndex, ListModel model)
 
     function upsertTransaction(modelIndex, transaction) {
         if (modelIndex === -1) {
