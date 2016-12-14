@@ -1,5 +1,6 @@
 import QtQuick 2.0
-import QtQuick.Controls 2.0
+import QtQuick.Controls 1.4
+import QtQml 2.2
 
 Item {
     id: root
@@ -8,31 +9,33 @@ Item {
 
     property alias labelText: label.text
     property alias labelFontPixelSize: label.font.pixelSize
-    property alias placeholderText: textField.placeholderText
-    property alias text: textField.text
+    property alias selectedDate: calendar.selectedDate
 
     function getRoleValue(role) {
-        return text
+        return selectedDate.toLocaleString(Locale.ShortFormat)
     }
 
     function setRoleValue(role, value) {
-        text = value
+        selectedDate = Date.fromLocaleString(Qt.locale(), value, Locale.ShortFormat)
     }
 
     function clear() {
-        text = ""
+        calendar.selectedDate = new Date()
     }
+
+    implicitWidth: calendar.implicitWidth
+    implicitHeight: calendar.implicitHeight + calendar.anchors.topMargin + label.implicitHeight
 
     Text {
         id: label
         anchors {
-            left: parent.left
-            top: parent.top
+            left: root.left
+            top: root.top
         }
     }
 
-    TextField {
-        id: textField
+    Calendar {
+        id: calendar
         anchors {
             left: label.left
             top: label.bottom

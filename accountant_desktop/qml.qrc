@@ -9,5 +9,8 @@
         <file>Workspace.qml</file>
         <file>AccountTable.qml</file>
         <file>WorkspaceTable.qml</file>
+        <file>WorkspaceView.qml</file>
+        <file>LabeledDateTimePicker.qml</file>
+        <file>LabeledTextArea.qml</file>
     </qresource>
 </RCC>

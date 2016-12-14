@@ -1,25 +1,17 @@
 import QtQuick 2.0
 import QtQuick.Controls 2.0
-import QtQml 2.2
 import QtQuick.Layouts 1.1
 
-Item {
-    id: root
+WorkspaceView {
+    id: accountView
 
-    property int textFieldHeight: 50
-
-    signal submit(var account, var modelIndex)
-    signal cancel()
-
-    property int modelIndex: -1
-    width: 640
-    height: 240
+    readonly property string viewType: "accountView"
+    fields: [accountName, accountDescription]
 
     ColumnLayout {
         id: mainLayoutColumn
 
         spacing: 20
-
         anchors {
             fill: parent
             margins: 10
@@ -27,33 +19,22 @@ Item {
 
         LabeledTextField {
             id: accountName
+            roles: ["account_name"]
             labelText: qsTr("Account Name")
-            placeholderText: qsTr("Enter account name...")
+            placeholderText: qsTr("Account name...")
             height: textFieldHeight
             Layout.fillWidth: true
         }
 
-        ColumnLayout {
-            id: textFieldsColumn
-            spacing: 5
-
-            Text {
-                id: descriptionLabel
-                text: qsTr("Account Description")
-            }
-
-            TextArea {
-                id: accountDescription
-                Layout.preferredHeight: 55
-                Layout.minimumHeight: 20
-                Layout.fillWidth: true
-                Layout.fillHeight: true
-                placeholderText: "Enter acount description..."
-                background: Rectangle {
-                    border.width: 1
-                    border.color: "gray"
-                }
-            }
+        LabeledTextArea {
+            id: accountDescription
+            roles: ["account_description"]
+            Layout.preferredHeight: 55
+            Layout.minimumHeight: 20
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+            placeholderText: qsTr("Account description...")
+            labelText: qsTr("Account Description")
         }
 
         RowLayout {
@@ -67,8 +48,7 @@ Item {
                 height: 30
                 text: qsTr("Submit")
                 onClicked: {
-                    var account = getFields()
-                    submit(account, modelIndex)
+                    __submit()
                 }
             }
 
@@ -78,40 +58,11 @@ Item {
                 height: 30
                 text: qsTr("Cancel")
                 onClicked: {
-                    cancel()
+                    __cancel()
                 }
             }
 
             Item { Layout.fillWidth: true }
         }
-    }
-
-
-    function setupView(account, modelIndex) {
-        __setFields(account)
-        root.modelIndex = modelIndex
-    }
-
-    function clearView() {
-        __cleanUpFields()
-        root.modelIndex = -1
-    }
-
-    function __setFields(account) {
-        accountName.text        = transaction.account_name
-        accountDescription.text = transaction.account_description
-    }
-
-    function __cleanUpFields() {
-        accountName.text        = ""
-        accountDescription.text = ""
-    }
-
-    function getFields() {
-        var account = {
-            "account_name":         accountName.text,
-            "account_description":  accountDescription.text
-        }
-        return account
     }
 }

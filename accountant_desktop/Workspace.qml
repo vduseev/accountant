@@ -4,11 +4,6 @@ import QtQuick.Controls 1.4
 TabView {
     id: tabView
 
-    function getCurrentTabItem() {
-        var currentItem = tabView.getTab(tabView.currentIndex).item
-        return currentItem
-    }
-
     function openTransactionTable() {
         var transactionTableTab =  __openTab("TransactionTable.qml", qsTr("Transactions"))
 
@@ -17,30 +12,51 @@ TabView {
         }
     }
 
+    function openAccountTable() {
+        var accountTableTab =  __openTab("AccountTable.qml", qsTr("Accounts"))
+
+        if (accountTableTab !== null) {
+            accountTableTab.item.rowDoubleClicked.connect(openEditAccountView)
+        }
+    }
+
     function openEditTransactionView(modelIndex, model) {
-        __openTransactionView(modelIndex, model, qsTr("Edit Transaction"))
+        __openElementView(modelIndex, model, "TransactionView.qml", qsTr("Edit Transaction"))
     }
 
     function openAddTransactionView(model) {
-        __openTransactionView(-1, model, qsTr("Add Transaction"))
+        __openElementView(-1, model, "TransactionView.qml", qsTr("Add Transaction"))
     }
 
-    function __openTransactionView(modelIndex, model, title) {
-        var currentTransactionTable = getCurrentTabItem()
-        var transactionViewTab = __openTab("TransactionView.qml", title)
+    function openEditAccountView(modelIndex, model) {
+        __openElementView(modelIndex, model, "AccountView.qml", qsTr("Edit Account"))
+    }
 
-        if (transactionViewTab !== null) {
+    function openAddAccountView(model) {
+        __openElementView(-1, model, "AccountView.qml", qsTr("Add Account"))
+    }
+
+    function getCurrentTabItem() {
+        var currentItem = tabView.getTab(tabView.currentIndex).item
+        return currentItem
+    }
+
+    function __openElementView(modelIndex, model, componentSourceName, title) {
+        var currentTable = getCurrentTabItem()
+        var tab = __openTab(componentSourceName, title)
+
+        if (tab !== null) {
             // Tab needs to be activated first, because it's a Loader.
             // Unless loader loads its content we can't address the methods inside the
             // content as we do in the next line.
-            transactionViewTab.active = true
-            transactionViewTab.item.setupView(modelIndex, model)
+            tab.active = true
+            tab.item.setupView(modelIndex, model)
             // Switch to opened tab. Use last index since added tab is always the last.
             tabView.currentIndex = tabView.count - 1
 
-            transactionViewTab.item.submit.connect(__closeCurrentTab)
-            transactionViewTab.item.cancel.connect(__closeCurrentTab)
-            transactionViewTab.item.submit.connect(currentTransactionTable.resizeColumnsToContents)
+            tab.item.submit.connect(__closeCurrentTab)
+            tab.item.cancel.connect(__closeCurrentTab)
+            tab.item.submit.connect(currentTable.resizeColumnsToContents)
         }
     }
 
@@ -48,7 +64,10 @@ TabView {
         var component = Qt.createComponent(componentSourceName)
         var tab = tabView.addTab(title, component)
 
-        if (tab === null) {
+        if (tab !== null) {
+            tab.active = true
+            tabView.currentIndex = tabView.count - 1
+        } else {
             console.log("Error creating " + componentSourceName + " component")
         }
 
