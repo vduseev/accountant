@@ -12,7 +12,7 @@ ApplicationWindow {
     title: qsTr("The Accountant")
 
     Component.onCompleted: {
-        tabView.openNewTransactionTableTab()
+        workspace.openTransactionTable()
 
         // Window is automatically resized to to maximized state.
         // It feels more comfortable to use.
@@ -26,22 +26,30 @@ ApplicationWindow {
             MenuItem {
                 text: qsTr("Create new transaction...")
                 onTriggered: {
-                    var currentTab = tabView.getTab(tabView.currentIndex)
+                    var currentTab = workspace.getTab(workspace.currentIndex)
                     var model = currentTab.item.model
-                    tabView.openNewTransactionViewTabToAddTransaction(model)
+                    workspace.openAddTransactionView(model)
                 }
-                Component.onCompleted: { enabled = Qt.binding(tabView.isCurrentTabTransactionTable) }
+                Component.onCompleted: { enabled = Qt.binding( function() {
+                    return workspace.getCurrentTabItem().viewType === "transactionTable"
+                } ) }
             }
 
             MenuItem {
                 text: qsTr("Edit transaction...")
                 onTriggered: {
-                    var currentTab = tabView.getTab(tabView.currentIndex)
+                    var currentTab = workspace.getTab(workspace.currentIndex)
                     var model = currentTab.item.model
                     var row = currentTab.item.currentRow
-                    tabView.openNewTransactionViewTabToEditTransaction(row, model)
+                    workspace.openEditTransactionView(row, model)
                 }
-                Component.onCompleted: { enabled = Qt.binding(tabView.isTransactionSelected) }
+                Component.onCompleted: { enabled = Qt.binding( function() {
+                    var item = workspace.getCurrentTabItem()
+                    if (item.viewType === "transactionTable")
+                        if (item.currentRow > -1)
+                            return true
+                    return false
+                } ) }
             }
         }
 
@@ -50,8 +58,8 @@ ApplicationWindow {
         }
     }
 
-    MyTabView {
-        id: tabView
+    Workspace {
+        id: workspace
         anchors.fill: parent
     }
 }

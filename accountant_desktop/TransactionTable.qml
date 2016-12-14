@@ -2,43 +2,13 @@ import QtQuick 2.0
 import QtQuick.Controls 1.4
 import QtQml 2.2
 
-TableView {
+WorkspaceTable {
     id: transactionTable
 
     readonly property string viewType: "transactionTable"
 
-    signal doubleClickedOnTransaction(int modelIndex, ListModel model)
-
-    function upsertTransaction(modelIndex, transaction) {
-        if (modelIndex === -1) {
-            addTransaction(transaction)
-        } else {
-            updateTransaction(transaction, modelIndex)
-        }
-    }
-
-    function updateTransaction(modelIndex, transaction) {
-        transactionTable.model.set(modelIndex, transaction)
-    }
-
-    function addTransaction(transaction) {
-        transactionTable.model.append(transaction)
-    }
-
-    // ListModel belongs to TransactionTable.
-    // It is instantiated together with TransactionTable and populated with
-    // WorkerScript inside it.
-    model: ListModel { }
-
-    selectionMode: SelectionMode.ExtendedSelection
-
     Component.onCompleted: {
         lazyDataLoader.sendMessage("Load the data")
-    }
-
-    onDoubleClicked: {
-        var transaction = model.get(row)
-        doubleClickedOnTransaction(row, model)
     }
 
     // date & time
