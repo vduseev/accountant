@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/">
-        <file>lazyLoader.js</file>
+        <file>lazyTransactionLoader.js</file>
+        <file>lazyAccountLoader.js</file>
     </qresource>
 </RCC>

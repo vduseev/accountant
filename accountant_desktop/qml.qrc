@@ -7,5 +7,6 @@
         <file>LabeledTextField.qml</file>
         <file>LabeledAmountCurrencyField.qml</file>
         <file>MyTabView.qml</file>
+        <file>AccountTable.qml</file>
     </qresource>
 </RCC>

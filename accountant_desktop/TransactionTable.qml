@@ -61,7 +61,7 @@ TableView {
 
     WorkerScript {
         id: lazyDataLoader
-        source: "lazyLoader.js"
+        source: "lazyTransactionLoader.js"
 
         onMessage: {
             var listModelItem = messageObject
