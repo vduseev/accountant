@@ -20,12 +20,10 @@ TableView {
         currentColumn = column
     }
 
+    // Set of methods to move through the table.
     function stepLeft() { currentColumn = Math.max(0, currentColumn - 1) }
-
     function stepUp() { currentRow = Math.max(0, currentRow - 1) }
-
     function stepRight() { currentColumn = Math.min(tableView.columnCount - 1, currentColumn + 1 ) }
-
     function stepDown() { currentRow = Math.min(tableView.rowCount - 1, currentRow + 1) }
 
     function upsert(modelIndex, element) {
@@ -53,7 +51,8 @@ TableView {
         return tableViewColumn.role
     }
 
-    // Returns altered element
+    // Returns altered element with text converted to actual JS value.
+    // This method relies on keywords in role names.
     function __setElementField(element, role, value) {
         var updatedElement = element
         if (role.indexOf("date") > -1) {
@@ -77,7 +76,8 @@ TableView {
     }
 
     rowDelegate: Item {
-        Rectangle { anchors.bottom: parent.bottom; width: parent.width; height: 1; color: "#EEE" }
+        // Bottom border of the row
+        Rectangle { z: styleData.row === currentRow ? 1 : 0; anchors.bottom: parent.bottom; width: parent.width; height: 1; color: "#EEE" }
     }
 
     itemDelegate: MouseArea {
@@ -86,12 +86,11 @@ TableView {
         property int zIncrementForRow: styleData.row === currentRow ? 1 : 0
         property int zIncrementForColumn: styleData.column === currentColumn ? 1 : 0
 
+        // Z index is incremented for current cell, so that it's shadow overlaps neighbor cells
         z: zIncrementForRow + zIncrementForColumn
 
         // Right corner border
-        Rectangle { anchors.right: parent.right; width: 1; height: parent.height; color: "#EEE" }
-        // Bottom border
-        Rectangle { anchors.bottom: parent.bottom; width: parent.width; height: 1; color: "#EEE" }
+        Rectangle { z: 0; anchors.right: parent.right; width: 1; height: parent.height; color: "#EEE" }
 
         // Selection border
         Rectangle {
@@ -116,20 +115,24 @@ TableView {
         Loader {
             id: cellValueEditor
             anchors.fill: parent
-            z: 2
+            z: itemArea.z + 1
             active: false
             asynchronous: true
             sourceComponent: Rectangle {
-                z: 3
+                id: cellBackground
+                z: cellValueEditor.z + 1
                 border.color: "#44F"
                 border.width: 2
                 layer.enabled: true
                 layer.effect: DropShadow {
+                    // Z index of shadow should be the highest among all neighbor items
+                    z: cellBackground.z + 1
                     color: "#999"
                     radius: 6
                     transparentBorder: true
                     horizontalOffset: 2
                     verticalOffset: 2
+
                 }
 
                 TextInput {
@@ -140,16 +143,18 @@ TableView {
                     anchors.right: parent.right
                     anchors.rightMargin: 10
 
+                    // Catch return specifically to finish editing
                     Keys.priority: Keys.BeforeItem
                     Keys.onReturnPressed: {
                         stepDown()
                     }
 
-                    onEditingFinished: finishEditing()
+                    onEditingFinished: updateModelWithResultOfEditing()
 
+                    // After loading TextInput should receive active focues
                     Component.onCompleted: forceActiveFocus()
 
-                    function finishEditing() {
+                    function updateModelWithResultOfEditing() {
                         // Obtain current element
                         var element = __getElement(styleData.row)
                         // Find out which role this cell is displaying

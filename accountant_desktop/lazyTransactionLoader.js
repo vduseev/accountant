@@ -1,5 +1,5 @@
 WorkerScript.onMessage = function(message) {
-    for (var i = 1; i < 50; i++) {
+    for (var i = 1; i < 5; i++) {
         var transaction = {
             "date": new Date("November " + (i % 30 + 1) + ", 2016 03:24:00"), //.toLocaleString(QtCommon.Locale.ShortFormat),
 
