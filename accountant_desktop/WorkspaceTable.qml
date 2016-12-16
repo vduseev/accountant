@@ -186,10 +186,9 @@ TableView {
         acceptedButtons: Qt.LeftButton | Qt.RightButton
 
         onClicked: {
-            if (mouse.button === Qt.LeftButton) {
-                // Select clicked cell
-                setCurrentCell(styleData.row, styleData.column)
-            } else if (mouse.button === Qt.RightButton) {
+            // Select clicked cell
+            setCurrentCell(styleData.row, styleData.column)
+            if (mouse.button === Qt.RightButton) {
                 // Open context menu
                 contextMenu.popup()
             }
