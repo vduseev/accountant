@@ -1,4 +1,4 @@
-import QtQuick 2.0
+import QtQuick 2.7
 import QtQuick.Controls 1.4
 import QtGraphicalEffects 1.0
 import QtQml 2.2
@@ -20,6 +20,14 @@ TableView {
         currentColumn = column
     }
 
+    function stepLeft() { currentColumn = Math.max(0, currentColumn - 1) }
+
+    function stepUp() { currentRow = Math.max(0, currentRow - 1) }
+
+    function stepRight() { currentColumn = Math.min(tableView.columnCount - 1, currentColumn + 1 ) }
+
+    function stepDown() { currentRow = Math.min(tableView.rowCount - 1, currentRow + 1) }
+
     function upsert(modelIndex, element) {
         if (modelIndex === -1) {
             __addElement(element)
@@ -34,6 +42,28 @@ TableView {
 
     function __addElement(element) {
         model.append(element)
+    }
+
+    function __getElement(modelIndex) {
+        return model.get(modelIndex)
+    }
+
+    function __getCurrentRole(columnIndex) {
+        var tableViewColumn = tableView.getColumn(columnIndex)
+        return tableViewColumn.role
+    }
+
+    // Returns altered element
+    function __setElementField(element, role, value) {
+        var updatedElement = element
+        if (role.indexOf("date") > -1) {
+            updatedElement[role] = value.toLocaleString(Locale.ShortFormat)
+        } else if (role.indexOf("amount") > -1) {
+            updatedElement[role] = parseFloat(value)
+        } else {
+            updatedElement[role] = value
+        }
+        return updatedElement
     }
 
     // ListModel belongs to this table.
@@ -52,6 +82,11 @@ TableView {
 
     itemDelegate: MouseArea {
         id: itemArea
+
+        property int zIncrementForRow: styleData.row === currentRow ? 1 : 0
+        property int zIncrementForColumn: styleData.column === currentColumn ? 1 : 0
+
+        z: zIncrementForRow + zIncrementForColumn
 
         // Right corner border
         Rectangle { anchors.right: parent.right; width: 1; height: parent.height; color: "#EEE" }
@@ -81,10 +116,11 @@ TableView {
         Loader {
             id: cellValueEditor
             anchors.fill: parent
-            z: 900
+            z: 2
             active: false
             asynchronous: true
             sourceComponent: Rectangle {
+                z: 3
                 border.color: "#44F"
                 border.width: 2
                 layer.enabled: true
@@ -104,7 +140,25 @@ TableView {
                     anchors.right: parent.right
                     anchors.rightMargin: 10
 
+                    Keys.priority: Keys.BeforeItem
+                    Keys.onReturnPressed: {
+                        stepDown()
+                    }
+
+                    onEditingFinished: finishEditing()
+
                     Component.onCompleted: forceActiveFocus()
+
+                    function finishEditing() {
+                        // Obtain current element
+                        var element = __getElement(styleData.row)
+                        // Find out which role this cell is displaying
+                        var role = __getCurrentRole(styleData.column)
+                        // Set new value to the element
+                        var updatedElement = __setElementField(element, role, text)
+                        // Update the model
+                        upsert(styleData.row, updatedElement)
+                    }
                 }
             }
         }
@@ -163,7 +217,22 @@ TableView {
         rowDoubleClicked(row, model)
     }
 
+    Keys.onPressed: {
+        if (event.key === Qt.Key_Left) {
+            stepLeft()
+        } else if (event.key === Qt.Key_Up) {
+            stepUp()
+        } else if (event.key === Qt.Key_Right) {
+            stepRight()
+        } else if (event.key === Qt.Key_Down) {
+            stepDown()
+        }
+
+        event.accepted = true
+    }
+
     Component.onCompleted: {
         lazyDataLoader.sendMessage('load data')
+        forceActiveFocus()
     }
 }

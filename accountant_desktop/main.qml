@@ -6,8 +6,8 @@ ApplicationWindow {
     id: mainApplicationWindow
     visible: true
 
-    //width: Screen.desktopAvailableWidth
-    //height: Screen.desktopAvailableHeight
+    width: Screen.desktopAvailableWidth / 2
+    height: Screen.desktopAvailableHeight / 2
 
     title: qsTr("The Accountant")
 
@@ -17,7 +17,7 @@ ApplicationWindow {
 
         // Window is automatically resized to to maximized state.
         // It feels more comfortable to use.
-        showMaximized()
+        // showMaximized()
     }
 
     menuBar: MenuBar {
