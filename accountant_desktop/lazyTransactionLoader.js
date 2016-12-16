@@ -16,6 +16,8 @@ WorkerScript.onMessage = function(message) {
             "description": "Monthly subscription"
         }
 
-        WorkerScript.sendMessage(transaction)
+        WorkerScript.sendMessage({ "messageType": "data", "data": transaction })
     }
+
+    WorkerScript.sendMessage({ "messageType": "finished"})
 }
