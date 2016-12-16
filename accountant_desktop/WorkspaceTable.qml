@@ -6,8 +6,10 @@ TableView {
     id: tableView
 
     readonly property string viewType: "abstractTable"
+    property alias workerScriptSource: lazyDataLoader.source
 
     signal rowDoubleClicked(int modelIndex, ListModel model)
+    signal workerScriptMessage(var message)
 
     function upsert(modelIndex, element) {
         if (modelIndex === -1) {
@@ -34,5 +36,12 @@ TableView {
 
     onDoubleClicked: {
         rowDoubleClicked(row, model)
+    }
+
+    Component.onCompleted: lazyDataLoader.sendMessage('load data')
+
+    WorkerScript {
+        id: lazyDataLoader
+        onMessage: workerScriptMessage(messageObject)
     }
 }

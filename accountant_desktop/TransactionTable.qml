@@ -7,10 +7,6 @@ WorkspaceTable {
 
     readonly property string viewType: "transactionTable"
 
-    Component.onCompleted: {
-        lazyDataLoader.sendMessage("Load the data")
-    }
-
     // date & time
     TableViewColumn { role: "date";             title: "Date" }
 
@@ -29,15 +25,12 @@ WorkspaceTable {
     // description
     TableViewColumn { role: "description";      title: "Description" }
 
-    WorkerScript {
-        id: lazyDataLoader
-        source: "lazyTransactionLoader.js"
+    workerScriptSource: "lazyTransactionLoader.js"
 
-        onMessage: {
-            var listModelItem = messageObject
-            listModelItem.date = messageObject.date.toLocaleString(Locale.ShortFormat)
-            transactionTable.model.append(listModelItem)
-            transactionTable.resizeColumnsToContents()
-        }
+    onWorkerScriptMessage: {
+        var listModelItem = message
+        listModelItem.date = message.date.toLocaleString(Locale.ShortFormat)
+        transactionTable.model.append(listModelItem)
+        transactionTable.resizeColumnsToContents()
     }
 }
