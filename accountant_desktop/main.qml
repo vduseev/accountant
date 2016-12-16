@@ -86,13 +86,15 @@ ApplicationWindow {
                     var row = currentTab.item.currentRow
                     workspace.openEditAccountView(row, model)
                 }
-                Component.onCompleted: { enabled = Qt.binding( function() {
-                    var item = workspace.getCurrentTabItem()
-                    if (item.viewType === "accountTable")
-                        if (item.currentRow > -1)
-                            return true
-                    return false
-                } ) }
+                Component.onCompleted: {
+                    enabled = Qt.binding( function() {
+                        var item = workspace.getCurrentTabItem()
+                        if (item.viewType === "accountTable")
+                            if (item.currentRow > -1)
+                                return true
+                        return false
+                    } )
+                }
             }
 
             MenuSeparator { }
