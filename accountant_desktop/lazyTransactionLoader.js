@@ -1,5 +1,5 @@
 WorkerScript.onMessage = function(message) {
-    for (var i = 1; i < 5; i++) {
+    for (var i = 1; i < 50; i++) {
         var transaction = {
             "date": new Date("November " + (i % 30 + 1) + ", 2016 03:24:00"), //.toLocaleString(QtCommon.Locale.ShortFormat),
 
@@ -17,5 +17,23 @@ WorkerScript.onMessage = function(message) {
         }
 
         WorkerScript.sendMessage(transaction)
+    }
+
+    for (var j = 1; j < 5; j++) {
+        var bip = {
+            "date": new Date(),
+            "from_account": "",
+            "to_account": "",
+            "payment_amount":       0,
+            "payment_currency":     "",
+            "blocked_amount":       0,
+            "blocked_currency":     "",
+            "actual_amount":        0,
+            "actual_currency":      "",
+
+            "description": ""
+        }
+
+        WorkerScript.sendMessage(bip)
     }
 }
