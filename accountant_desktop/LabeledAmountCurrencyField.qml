@@ -15,7 +15,7 @@ Item {
 
     function getRoleValue(role) {
         if (role.indexOf("amount") > -1) {
-            return parseFloat(amount)
+            return amount
         } else if (role.indexOf("currency") > -1) {
             return currency
         }
