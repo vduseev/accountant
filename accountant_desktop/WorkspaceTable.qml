@@ -36,6 +36,16 @@ TableView {
         model.append(element)
     }
 
+    // ListModel belongs to this table.
+    // It is instantiated together with root and populated with
+    // WorkerScript inside it.
+    model: ListModel {
+        onCountChanged: {
+            resizeColumnsToContents()
+            positionViewAtRow(count - 1, ListView.Visible)
+        }
+    }
+
     rowDelegate: Item {
         Rectangle { anchors.bottom: parent.bottom; width: parent.width; height: 1; color: "#EEE" }
     }
@@ -94,10 +104,6 @@ TableView {
                     anchors.right: parent.right
                     anchors.rightMargin: 10
 
-                    onActiveFocusChanged: {
-                        console.log("focus:", activeFocus)
-                    }
-
                     Component.onCompleted: forceActiveFocus()
                 }
             }
@@ -146,14 +152,9 @@ TableView {
         }
     }
 
-    // ListModel belongs to this table.
-    // It is instantiated together with root and populated with
-    // WorkerScript inside it.
-    model: ListModel {
-        onCountChanged: {
-            resizeColumnsToContents()
-            positionViewAtRow(count - 1, ListView.Visible)
-        }
+    WorkerScript {
+        id: lazyDataLoader
+        onMessage: workerScriptMessage(messageObject)
     }
 
     selectionMode: SelectionMode.ExtendedSelection
@@ -162,10 +163,7 @@ TableView {
         rowDoubleClicked(row, model)
     }
 
-    Component.onCompleted: lazyDataLoader.sendMessage('load data')
-
-    WorkerScript {
-        id: lazyDataLoader
-        onMessage: workerScriptMessage(messageObject)
+    Component.onCompleted: {
+        lazyDataLoader.sendMessage('load data')
     }
 }
