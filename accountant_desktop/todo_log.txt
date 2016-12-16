@@ -3,3 +3,4 @@ Fri 16 Dec 05:51
 + TableView should go the the end when transaction is added
 - TableView should display empty rows at the end just like usual spreadsheet editor
 + Rows in TableView should be editable
+- Implement resize column to contents
