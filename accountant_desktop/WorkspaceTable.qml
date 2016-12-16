@@ -30,7 +30,12 @@ TableView {
     // ListModel belongs to this table.
     // It is instantiated together with root and populated with
     // WorkerScript inside it.
-    model: ListModel { }
+    model: ListModel {
+        onCountChanged: {
+            tableView.resizeColumnsToContents()
+            positionViewAtRow(count - 1, ListView.Visible)
+        }
+    }
 
     selectionMode: SelectionMode.ExtendedSelection
 

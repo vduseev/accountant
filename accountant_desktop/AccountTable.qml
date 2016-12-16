@@ -15,6 +15,5 @@ WorkspaceTable {
     onWorkerScriptMessage: {
         var listModelItem = message
         accountTable.model.append(listModelItem)
-        accountTable.resizeColumnsToContents()
     }
 }

@@ -31,6 +31,5 @@ WorkspaceTable {
         var listModelItem = message
         listModelItem.date = message.date.toLocaleString(Locale.ShortFormat)
         transactionTable.model.append(listModelItem)
-        transactionTable.resizeColumnsToContents()
     }
 }
