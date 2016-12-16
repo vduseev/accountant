@@ -9,6 +9,7 @@ TableView {
     readonly property string viewType: "abstractTable"
     // Indicated currently selected column
     property int currentColumn: -1
+    property int rowHeight: 0
     property alias workerScriptSource: lazyDataLoader.source
 
     signal editRow(int modelIndex, ListModel model)
@@ -77,6 +78,7 @@ TableView {
     rowDelegate: Item {
         // Bottom border of the row
         Rectangle { z: styleData.row === currentRow ? 1 : 0; anchors.bottom: parent.bottom; width: parent.width; height: 1; color: "#EEE" }
+        Binding { target: tableView; property: "rowHeight"; value: height }
     }
 
     itemDelegate: MouseArea {
@@ -211,7 +213,24 @@ TableView {
 
     WorkerScript {
         id: lazyDataLoader
-        onMessage: workerScriptMessage(messageObject)
+        onMessage: {
+            if (messageObject.messageType === "data") {
+                workerScriptMessage(messageObject.data)
+            } else if (messageObject.messageType === "finished") {
+                // add enough empty rows
+                var viewHeight = tableView.height
+                var bufferRowsCount = (viewHeight / rowHeight) - 4
+                for (var i = 0; i < bufferRowsCount; i++) {
+                    var bufferElement = {}
+                    for (var j = 0; j < columnCount; j++) {
+                        var columnRole = getColumn(j).role
+                        bufferElement[columnRole] = ""
+                    }
+
+                    __addElement(bufferElement)
+                }
+            }
+        }
     }
 
     selectionMode: SelectionMode.ExtendedSelection

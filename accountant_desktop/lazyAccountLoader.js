@@ -5,6 +5,7 @@ WorkerScript.onMessage = function(message) {
             "account_description":  "MY Poland card"
         }
 
-        WorkerScript.sendMessage(account)
+        WorkerScript.sendMessage({ "messageType": "data", "data": account })
     }
+    WorkerScript.sendMessage({ "messageType": "finished" })
 }
