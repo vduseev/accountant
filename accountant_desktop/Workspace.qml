@@ -1,5 +1,7 @@
 import QtQuick 2.6
 import QtQuick.Controls 1.4
+import QtQuick.Controls.Styles 1.4
+import QtQuick.Controls 2.0 as MobileControls
 
 TabView {
     id: tabView
@@ -41,6 +43,11 @@ TabView {
         return currentItem
     }
 
+    function closeCurrentTab() {
+        var currentIndex = tabView.currentIndex
+        tabView.removeTab(currentIndex)
+    }
+
     function __openElementView(modelIndex, model, componentSourceName, title) {
         var currentTable = getCurrentTabItem()
         var tab = __openTab(componentSourceName, title)
@@ -54,8 +61,8 @@ TabView {
             // Switch to opened tab. Use last index since added tab is always the last.
             tabView.currentIndex = tabView.count - 1
 
-            tab.item.submit.connect(__closeCurrentTab)
-            tab.item.cancel.connect(__closeCurrentTab)
+            tab.item.submit.connect(closeCurrentTab)
+            tab.item.cancel.connect(closeCurrentTab)
             tab.item.submit.connect(currentTable.resizeColumnsToContents)
         }
     }
@@ -74,8 +81,59 @@ TabView {
         return tab
     }
 
-    function __closeCurrentTab() {
-        var currentIndex = tabView.currentIndex
-        tabView.removeTab(currentIndex)
+    style: TabViewStyle {
+        id: tabViewStyle
+        tabsMovable: true
+        frameOverlap: 1
+        tab: Rectangle {
+            SystemPalette {
+                id: tabPalette
+            }
+
+            property int totalOverlap: tabViewStyle.tabOverlap * (control.count - 1)
+            property real maxTabWidth: control.count > 0 ? (control.width + totalOverlap) / control.count : 0
+
+            implicitWidth: Math.min(maxTabWidth, Math.max(50, tabTitle.width)  + closeButton.width /*+ tabHSpace*/ + 2 + 22)
+            implicitHeight: Math.max(tabTitle.font.pixelSize /*+ tabVSpace*/ + 12, 0)
+
+            radius: 2
+
+            border {
+                color: "#AAA"
+                width: 1
+            }
+
+            gradient: Gradient {
+                GradientStop { position: 0; color: styleData.selected ? tabPalette.light : tabPalette.midlight }
+                GradientStop { position: 1; color: styleData.selected ? tabPalette.midlight : tabPalette.mid }
+            }
+
+            Text {
+                id: tabTitle
+                anchors {
+                    verticalCenter: parent.verticalCenter
+                    left: parent.left
+                    leftMargin: 12
+                }
+                text: styleData.title
+            }
+
+            MobileControls.Button {
+                id: closeButton
+                width: parent.height * 0.6
+                height: parent.height * 0.6
+                anchors {
+                    verticalCenter: parent.verticalCenter
+                    left: tabTitle.right
+                    leftMargin: 4
+                }
+                flat: true
+                text: "x"
+
+                onClicked: {
+                    closeCurrentTab()
+                }
+            }
+        }
     }
 }
