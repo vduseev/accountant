@@ -10,7 +10,7 @@ TabView {
         var transactionTableTab =  __openTab("TransactionTable.qml", qsTr("Transactions"))
 
         if (transactionTableTab !== null) {
-            transactionTableTab.item.rowDoubleClicked.connect(openEditTransactionView)
+            transactionTableTab.item.editRow.connect(openEditTransactionView)
         }
     }
 
@@ -18,7 +18,7 @@ TabView {
         var accountTableTab =  __openTab("AccountTable.qml", qsTr("Accounts"))
 
         if (accountTableTab !== null) {
-            accountTableTab.item.rowDoubleClicked.connect(openEditAccountView)
+            accountTableTab.item.editRow.connect(openEditAccountView)
         }
     }
 

@@ -11,8 +11,7 @@ TableView {
     property int currentColumn: -1
     property alias workerScriptSource: lazyDataLoader.source
 
-    signal openCell(int modelIndex, ListModel model)
-    signal rowDoubleClicked(int modelIndex, ListModel model)
+    signal editRow(int modelIndex, ListModel model)
     signal workerScriptMessage(var message)
 
     function setCurrentCell(row, column) {
@@ -207,7 +206,7 @@ TableView {
 
         MenuItem {
             text: qsTr("Edit...")
-            onTriggered: openCell(currentRow, model)
+            onTriggered: editRow(currentRow, model)
         }
     }
 
@@ -219,7 +218,7 @@ TableView {
     selectionMode: SelectionMode.ExtendedSelection
 
     onDoubleClicked: {
-        rowDoubleClicked(row, model)
+        editRow(row, model)
     }
 
     Keys.onPressed: {
