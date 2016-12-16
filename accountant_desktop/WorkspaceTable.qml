@@ -20,11 +20,11 @@ TableView {
     }
 
     function __updateElement(modelIndex, element) {
-        tableView.model.set(modelIndex, element)
+        model.set(modelIndex, element)
     }
 
     function __addElement(element) {
-        tableView.model.append(element)
+        model.append(element)
     }
 
     // ListModel belongs to this table.
@@ -32,7 +32,7 @@ TableView {
     // WorkerScript inside it.
     model: ListModel {
         onCountChanged: {
-            tableView.resizeColumnsToContents()
+            resizeColumnsToContents()
             positionViewAtRow(count - 1, ListView.Visible)
         }
     }
