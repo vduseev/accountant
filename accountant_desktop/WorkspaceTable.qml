@@ -52,19 +52,8 @@ TableView {
 
     itemDelegate: WorkspaceTableCell {
         onEditingFinished: {
-            updateModelWithResultOfEditing(text)
+            __updateModelWithResultOfEditing(styleData.row, styleData.column, text)
             resizeColumnsToContents()
-        }
-
-        function updateModelWithResultOfEditing(text) {
-            // Obtain current element
-            var element = __getElement(styleData.row)
-            // Find out which role this cell is displaying
-            var role = __getCurrentRole(styleData.column)
-            // Set new value to the element
-            var updatedElement = __setElementField(element, role, text)
-            // Update the model
-            upsert(styleData.row, updatedElement)
         }
     }
 
@@ -153,5 +142,16 @@ TableView {
             updatedElement[role] = value
         }
         return updatedElement
+    }
+
+    function __updateModelWithResultOfEditing(row, column, text) {
+        // Obtain current element
+        var element = __getElement(row)
+        // Find out which role this cell is displaying
+        var role = __getCurrentRole(column)
+        // Set new value to the element
+        var updatedElement = __setElementField(element, role, text)
+        // Update the model
+        upsert(row, updatedElement)
     }
 }
