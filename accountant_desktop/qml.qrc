@@ -13,5 +13,6 @@
         <file>LabeledDateTimePicker.qml</file>
         <file>LabeledTextArea.qml</file>
         <file>TextInputCell.qml</file>
+        <file>WorkspaceTableCell.qml</file>
     </qresource>
 </RCC>
