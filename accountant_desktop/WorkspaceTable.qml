@@ -119,59 +119,14 @@ TableView {
             z: cellDelegate.z + 1
             active: false
             asynchronous: true
-            sourceComponent: textInputCell
+            source: "TextInputCell.qml"
         }
 
-        Component {
-            id: textInputCell
-            Rectangle {
-                id: cellBackground
-                z: cellEditorLoader.z + 1
-                border.color: "#44F"
-                border.width: 2
-                layer.enabled: true
-                layer.effect: DropShadow {
-                    // Z index of shadow should be the highest among all neighbor items
-                    z: cellBackground.z + 1
-                    color: "#999"
-                    radius: 6
-                    transparentBorder: true
-                    horizontalOffset: 2
-                    verticalOffset: 2
-
-                }
-
-                TextInput {
-                    text: styleData.value
-                    anchors.left: parent.left
-                    anchors.leftMargin: 10
-                    anchors.verticalCenter: parent.verticalCenter
-                    anchors.right: parent.right
-                    anchors.rightMargin: 10
-
-                    // Catch return specifically to finish editing
-                    Keys.priority: Keys.BeforeItem
-                    Keys.onReturnPressed: {
-                        stepDown()
-                    }
-
-                    onEditingFinished: updateModelWithResultOfEditing()
-
-                    // After loading TextInput should receive active focues
-                    Component.onCompleted: forceActiveFocus()
-
-                    function updateModelWithResultOfEditing() {
-                        // Obtain current element
-                        var element = __getElement(styleData.row)
-                        // Find out which role this cell is displaying
-                        var role = __getCurrentRole(styleData.column)
-                        // Set new value to the element
-                        var updatedElement = __setElementField(element, role, text)
-                        // Update the model
-                        upsert(styleData.row, updatedElement)
-                    }
-                }
-            }
+        Connections {
+            target: cellEditorLoader.item
+            onReturnPressed: stepDown()
+            onEscapePressed: stepDown()
+            onEditingFinished: updateModelWithResultOfEditing(text)
         }
 
         Connections {
@@ -188,6 +143,17 @@ TableView {
                     cellEditorLoader.active = false
                 }
             }
+        }
+
+        function updateModelWithResultOfEditing(text) {
+            // Obtain current element
+            var element = __getElement(styleData.row)
+            // Find out which role this cell is displaying
+            var role = __getCurrentRole(styleData.column)
+            // Set new value to the element
+            var updatedElement = __setElementField(element, role, text)
+            // Update the model
+            upsert(styleData.row, updatedElement)
         }
 
         MouseArea {

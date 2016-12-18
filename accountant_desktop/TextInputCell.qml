@@ -5,9 +5,10 @@ Rectangle {
     id: textInputCell
 
     signal returnPressed()
+    signal escapePressed()
     signal editingFinished(string text)
 
-    z: parent.z + 1
+    z: 1
 
     border.color: "#44F"
     border.width: 2
@@ -35,6 +36,7 @@ Rectangle {
         // Catch return specifically to finish editing
         Keys.priority: Keys.BeforeItem
         Keys.onReturnPressed: textInputCell.returnPressed()
+        Keys.onEscapePressed: textInputCell.escapePressed()
 
         onEditingFinished: textInputCell.editingFinished(text)
 
