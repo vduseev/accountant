@@ -81,8 +81,8 @@ TableView {
         Binding { target: tableView; property: "rowHeight"; value: height }
     }
 
-    itemDelegate: MouseArea {
-        id: itemArea
+    itemDelegate: Item {
+        id: cellDelegate
 
         property int zIncrementForRow: styleData.row === currentRow ? 1 : 0
         property int zIncrementForColumn: styleData.column === currentColumn ? 1 : 0
@@ -114,14 +114,19 @@ TableView {
         }
 
         Loader {
-            id: cellValueEditor
+            id: cellEditorLoader
             anchors.fill: parent
-            z: itemArea.z + 1
+            z: cellDelegate.z + 1
             active: false
             asynchronous: true
-            sourceComponent: Rectangle {
+            sourceComponent: textInputCell
+        }
+
+        Component {
+            id: textInputCell
+            Rectangle {
                 id: cellBackground
-                z: cellValueEditor.z + 1
+                z: cellEditorLoader.z + 1
                 border.color: "#44F"
                 border.width: 2
                 layer.enabled: true
@@ -172,33 +177,34 @@ TableView {
         Connections {
             target: tableView
             onCurrentColumnChanged: {
-                if (cellValueEditor.active && styleData.column !== currentColumn) {
+                if (cellEditorLoader.active && styleData.column !== currentColumn) {
                     cellText.visible = true
-                    cellValueEditor.active = false
+                    cellEditorLoader.active = false
                 }
             }
             onCurrentRowChanged: {
-                if (cellValueEditor.active && styleData.row !== currentRow) {
+                if (cellEditorLoader.active && styleData.row !== currentRow) {
                     cellText.visible = true
-                    cellValueEditor.active = false
+                    cellEditorLoader.active = false
                 }
             }
         }
 
-        acceptedButtons: Qt.LeftButton | Qt.RightButton
-
-        onClicked: {
-            // Select clicked cell
-            setCurrentCell(styleData.row, styleData.column)
-            if (mouse.button === Qt.RightButton) {
-                // Open context menu
-                contextMenu.popup()
+        MouseArea {
+            anchors.fill: parent
+            acceptedButtons: Qt.LeftButton | Qt.RightButton
+            onClicked: {
+                // Select clicked cell
+                setCurrentCell(styleData.row, styleData.column)
+                if (mouse.button === Qt.RightButton) {
+                    // Open context menu
+                    contextMenu.popup()
+                }
             }
-        }
-
-        onDoubleClicked: {
-            cellText.visible = false
-            cellValueEditor.active = true
+            onDoubleClicked: {
+                cellText.visible = false
+                cellEditorLoader.active = true
+            }
         }
     }
 

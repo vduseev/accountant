@@ -12,5 +12,6 @@
         <file>WorkspaceView.qml</file>
         <file>LabeledDateTimePicker.qml</file>
         <file>LabeledTextArea.qml</file>
+        <file>TextInputCell.qml</file>
     </qresource>
 </RCC>
