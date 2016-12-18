@@ -34,37 +34,6 @@ TableView {
         }
     }
 
-    function __updateElement(modelIndex, element) {
-        model.set(modelIndex, element)
-    }
-
-    function __addElement(element) {
-        model.append(element)
-    }
-
-    function __getElement(modelIndex) {
-        return model.get(modelIndex)
-    }
-
-    function __getCurrentRole(columnIndex) {
-        var tableViewColumn = tableView.getColumn(columnIndex)
-        return tableViewColumn.role
-    }
-
-    // Returns altered element with text converted to actual JS value.
-    // This method relies on keywords in role names.
-    function __setElementField(element, role, value) {
-        var updatedElement = element
-        if (role.indexOf("date") > -1) {
-            updatedElement[role] = value.toLocaleString(Locale.ShortFormat)
-        } else if (role.indexOf("amount") > -1) {
-            updatedElement[role] = parseFloat(value)
-        } else {
-            updatedElement[role] = value
-        }
-        return updatedElement
-    }
-
     // ListModel belongs to this table.
     // It is instantiated together with root and populated with
     // WorkerScript inside it.
@@ -81,69 +50,10 @@ TableView {
         Binding { target: tableView; property: "rowHeight"; value: height }
     }
 
-    itemDelegate: Item {
-        id: cellDelegate
-
-        property int zIncrementForRow: styleData.row === currentRow ? 1 : 0
-        property int zIncrementForColumn: styleData.column === currentColumn ? 1 : 0
-
-        // implicitWidth is required for call of function resizeToContents() of TableViewColumn
-        implicitWidth: cellText.width + 2 * cellText.anchors.leftMargin
-
-        // Z index is incremented for current cell, so that it's shadow overlaps neighbor cells
-        z: zIncrementForRow + zIncrementForColumn
-
-        // Right corner border
-        Rectangle { z: 0; anchors.right: parent.right; width: 1; height: parent.height; color: "#EEE" }
-
-        // Selection border
-        Rectangle {
-            anchors.fill: parent
-            visible: styleData.row === currentRow && styleData.column === currentColumn
-            border.color: "#44F"
-            border.width: 2
-        }
-
-        Text {
-            id: cellText
-            text: styleData.value
-            color: "black"
-            elide: styleData.elideMode
-            anchors {
-                verticalCenter: parent.verticalCenter
-                left: parent.left
-                leftMargin: 10
-            }
-        }
-
-        Loader {
-            id: cellEditorLoader
-            anchors.fill: parent
-            z: cellDelegate.z + 1
-            active: false
-            asynchronous: true
-            source: "TextInputCell.qml"
-        }
-
-        Connections {
-            target: cellEditorLoader.item
-            onReturnPressed: stepDown()
-            onEscapePressed: cellEditorLoader.active = false
-            onEditingFinished: updateModelWithResultOfEditing(text)
-        }
-
-        Connections {
-            target: tableView
-            onCurrentColumnChanged: {
-                if (cellEditorLoader.active && styleData.column !== currentColumn) {
-                    cellEditorLoader.active = false
-                }
-            }
-            onCurrentRowChanged: {
-                if (cellEditorLoader.active && styleData.row !== currentRow) {
-                    cellEditorLoader.active = false
-                }
-            }
+    itemDelegate: WorkspaceTableCell {
+        onEditingFinished: {
+            updateModelWithResultOfEditing(text)
+            resizeColumnsToContents()
         }
 
         function updateModelWithResultOfEditing(text) {
@@ -156,22 +66,31 @@ TableView {
             // Update the model
             upsert(styleData.row, updatedElement)
         }
+    }
 
-        MouseArea {
-            anchors.fill: parent
-            acceptedButtons: Qt.LeftButton | Qt.RightButton
-            onClicked: {
-                // Select clicked cell
-                setCurrentCell(styleData.row, styleData.column)
-                if (mouse.button === Qt.RightButton) {
-                    // Open context menu
-                    contextMenu.popup()
-                }
-            }
-            onDoubleClicked: {
-                cellEditorLoader.active = true
-            }
+    selectionMode: SelectionMode.ExtendedSelection
+
+    onDoubleClicked: {
+        editRow(row, model)
+    }
+
+    Keys.onPressed: {
+        if (event.key === Qt.Key_Left) {
+            stepLeft()
+        } else if (event.key === Qt.Key_Up) {
+            stepUp()
+        } else if (event.key === Qt.Key_Right) {
+            stepRight()
+        } else if (event.key === Qt.Key_Down) {
+            stepDown()
         }
+
+        event.accepted = true
+    }
+
+    Component.onCompleted: {
+        lazyDataLoader.sendMessage('load data')
+        forceActiveFocus()
     }
 
     Menu {
@@ -205,28 +124,34 @@ TableView {
         }
     }
 
-    selectionMode: SelectionMode.ExtendedSelection
-
-    onDoubleClicked: {
-        editRow(row, model)
+    function __updateElement(modelIndex, element) {
+        model.set(modelIndex, element)
     }
 
-    Keys.onPressed: {
-        if (event.key === Qt.Key_Left) {
-            stepLeft()
-        } else if (event.key === Qt.Key_Up) {
-            stepUp()
-        } else if (event.key === Qt.Key_Right) {
-            stepRight()
-        } else if (event.key === Qt.Key_Down) {
-            stepDown()
+    function __addElement(element) {
+        model.append(element)
+    }
+
+    function __getElement(modelIndex) {
+        return model.get(modelIndex)
+    }
+
+    function __getCurrentRole(columnIndex) {
+        var tableViewColumn = tableView.getColumn(columnIndex)
+        return tableViewColumn.role
+    }
+
+    // Returns altered element with text converted to actual JS value.
+    // This method relies on keywords in role names.
+    function __setElementField(element, role, value) {
+        var updatedElement = element
+        if (role.indexOf("date") > -1) {
+            updatedElement[role] = value.toLocaleString(Locale.ShortFormat)
+        } else if (role.indexOf("amount") > -1) {
+            updatedElement[role] = value /* parseFloat(value) */
+        } else {
+            updatedElement[role] = value
         }
-
-        event.accepted = true
-    }
-
-    Component.onCompleted: {
-        lazyDataLoader.sendMessage('load data')
-        forceActiveFocus()
+        return updatedElement
     }
 }
