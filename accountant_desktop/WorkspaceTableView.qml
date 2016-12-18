@@ -48,39 +48,6 @@ TabView {
         tabView.removeTab(currentIndex)
     }
 
-    function __openElementView(modelIndex, model, componentSourceName, title) {
-        var currentTable = getCurrentTabItem()
-        var tab = __openTab(componentSourceName, title)
-
-        if (tab !== null) {
-            // Tab needs to be activated first, because it's a Loader.
-            // Unless loader loads its content we can't address the methods inside the
-            // content as we do in the next line.
-            tab.active = true
-            tab.item.setupView(modelIndex, model)
-            // Switch to opened tab. Use last index since added tab is always the last.
-            tabView.currentIndex = tabView.count - 1
-
-            tab.item.submit.connect(closeCurrentTab)
-            tab.item.cancel.connect(closeCurrentTab)
-            tab.item.submit.connect(currentTable.resizeColumnsToContents)
-        }
-    }
-
-    function __openTab(componentSourceName, title) {
-        var component = Qt.createComponent(componentSourceName)
-        var tab = tabView.addTab(title, component)
-
-        if (tab !== null) {
-            tab.active = true
-            tabView.currentIndex = tabView.count - 1
-        } else {
-            console.log("Error creating " + componentSourceName + " component")
-        }
-
-        return tab
-    }
-
     style: TabViewStyle {
         id: tabViewStyle
         tabsMovable: true
@@ -135,5 +102,38 @@ TabView {
                 }
             }
         }
+    }
+
+    function __openElementView(modelIndex, model, componentSourceName, title) {
+        var currentTable = getCurrentTabItem()
+        var tab = __openTab(componentSourceName, title)
+
+        if (tab !== null) {
+            // Tab needs to be activated first, because it's a Loader.
+            // Unless loader loads its content we can't address the methods inside the
+            // content as we do in the next line.
+            tab.active = true
+            tab.item.setupView(modelIndex, model)
+            // Switch to opened tab. Use last index since added tab is always the last.
+            tabView.currentIndex = tabView.count - 1
+
+            tab.item.submit.connect(closeCurrentTab)
+            tab.item.cancel.connect(closeCurrentTab)
+            tab.item.submit.connect(currentTable.resizeColumnsToContents)
+        }
+    }
+
+    function __openTab(componentSourceName, title) {
+        var component = Qt.createComponent(componentSourceName)
+        var tab = tabView.addTab(title, component)
+
+        if (tab !== null) {
+            tab.active = true
+            tabView.currentIndex = tabView.count - 1
+        } else {
+            console.log("Error creating " + componentSourceName + " component")
+        }
+
+        return tab
     }
 }
