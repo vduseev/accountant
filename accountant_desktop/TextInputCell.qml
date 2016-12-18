@@ -10,6 +10,7 @@ Rectangle {
 
     z: 1
 
+    color: "white"
     border.color: "#44F"
     border.width: 2
 
@@ -36,7 +37,7 @@ Rectangle {
         // Catch return specifically to finish editing
         Keys.priority: Keys.BeforeItem
         Keys.onReturnPressed: textInputCell.returnPressed()
-        Keys.onEscapePressed: textInputCell.escapePressed()
+        Keys.onEscapePressed: { text = styleData.value; textInputCell.escapePressed() }
 
         onEditingFinished: textInputCell.editingFinished(text)
 

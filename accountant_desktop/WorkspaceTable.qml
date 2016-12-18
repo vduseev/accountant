@@ -125,7 +125,7 @@ TableView {
         Connections {
             target: cellEditorLoader.item
             onReturnPressed: stepDown()
-            onEscapePressed: stepDown()
+            onEscapePressed: cellEditorLoader.active = false
             onEditingFinished: updateModelWithResultOfEditing(text)
         }
 
@@ -133,13 +133,11 @@ TableView {
             target: tableView
             onCurrentColumnChanged: {
                 if (cellEditorLoader.active && styleData.column !== currentColumn) {
-                    cellText.visible = true
                     cellEditorLoader.active = false
                 }
             }
             onCurrentRowChanged: {
                 if (cellEditorLoader.active && styleData.row !== currentRow) {
-                    cellText.visible = true
                     cellEditorLoader.active = false
                 }
             }
@@ -168,7 +166,6 @@ TableView {
                 }
             }
             onDoubleClicked: {
-                cellText.visible = false
                 cellEditorLoader.active = true
             }
         }
