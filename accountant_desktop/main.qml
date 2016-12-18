@@ -108,7 +108,7 @@ ApplicationWindow {
         }
     }
 
-    WorkspaceTableView {
+    WorkspaceTabView {
         id: workspace
         anchors.fill: parent
     }
