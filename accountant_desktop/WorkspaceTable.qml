@@ -87,6 +87,9 @@ TableView {
         property int zIncrementForRow: styleData.row === currentRow ? 1 : 0
         property int zIncrementForColumn: styleData.column === currentColumn ? 1 : 0
 
+        // implicitWidth is required for call of function resizeToContents() of TableViewColumn
+        implicitWidth: cellText.width + 2 * cellText.anchors.leftMargin
+
         // Z index is incremented for current cell, so that it's shadow overlaps neighbor cells
         z: zIncrementForRow + zIncrementForColumn
 
