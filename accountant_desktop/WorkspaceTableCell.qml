@@ -14,6 +14,16 @@ Item {
     // Z index is incremented for current cell, so that it's shadow overlaps neighbor cells
     z: zIncrementForRow + zIncrementForColumn
 
+    // React to key pressed and invoke cell editor
+    focus: styleData.row === currentRow && styleData.column === currentColumn
+    Keys.enabled: true
+    Keys.onPressed: {
+        console.log("key pressed:", event.key)
+        if (event.key >= 0x41 && event.key <= 0x5a) {
+            cellEditorLoader.active = true
+        }
+    }
+
     // Right corner border
     Rectangle { z: 0; anchors.right: parent.right; width: 1; height: parent.height; color: "#EEE" }
 
