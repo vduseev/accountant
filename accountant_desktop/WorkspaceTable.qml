@@ -55,6 +55,7 @@ TableView {
             __updateModelWithResultOfEditing(styleData.row, styleData.column, text)
             resizeColumnsToContents()
         }
+
         Component.onCompleted: {
             resizeColumnsToContents()
         }
@@ -69,15 +70,21 @@ TableView {
     Keys.onPressed: {
         if (event.key === Qt.Key_Left) {
             stepLeft()
+            event.accepted = true
         } else if (event.key === Qt.Key_Up) {
             stepUp()
+            event.accepted = true
         } else if (event.key === Qt.Key_Right) {
             stepRight()
+            event.accepted = true
         } else if (event.key === Qt.Key_Down) {
             stepDown()
+            event.accepted = true
         }
 
-        event.accepted = true
+        console.log("key pressed in table view:", event.key)
+
+        //event.accepted = true
     }
 
     Component.onCompleted: {

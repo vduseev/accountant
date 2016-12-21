@@ -14,13 +14,23 @@ Item {
     // Z index is incremented for current cell, so that it's shadow overlaps neighbor cells
     z: zIncrementForRow + zIncrementForColumn
 
-    // React to key pressed and invoke cell editor
+    // Focus is required to trigger forceActiveFocus. But only one cell can be active at a time
     focus: styleData.row === currentRow && styleData.column === currentColumn
-    Keys.enabled: true
+    // React to key pressed and invoke cell editor
     Keys.onPressed: {
-        console.log("key pressed:", event.key)
-        if (event.key >= 0x41 && event.key <= 0x5a) {
+        if (event.key >= 0x41 && event.key <= 0x5a ||
+            event.key >= 0x30 && event.key <= 0x39 ||
+            event.key === Qt.Key_F2)
+        {
             cellEditorLoader.active = true
+            event.accepted = true
+        }
+    }
+
+    onFocusChanged: {
+        if (focus) {
+            // Force active focus to be able to accept key presses and active view using them
+            forceActiveFocus()
         }
     }
 
@@ -64,11 +74,12 @@ Item {
         active: false
         asynchronous: true
         source: "TextInputCell.qml"
+        Keys.forwardTo: [cellDelegate]
     }
 
     Connections {
         target: cellEditorLoader.item
-        onReturnPressed: stepDown()
+        onReturnPressed: cellEditorLoader.active = false
         onEscapePressed: cellEditorLoader.active = false
         onEditingFinished: cellDelegate.editingFinished(text)
     }
