@@ -15,5 +15,6 @@
         <file>TextInputCell.qml</file>
         <file>WorkspaceTableCell.qml</file>
         <file>CalendarCell.qml</file>
+        <file>WorkspaceTableModel.qml</file>
     </qresource>
 </RCC>

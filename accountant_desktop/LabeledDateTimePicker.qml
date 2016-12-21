@@ -12,11 +12,11 @@ Item {
     property alias selectedDate: calendar.selectedDate
 
     function getRoleValue(role) {
-        return selectedDate.toLocaleString(Locale.ShortFormat)
+        return selectedDate.toLocaleDateString(Qt.locale(), "MM/dd/yyyy")
     }
 
     function setRoleValue(role, value) {
-        selectedDate = Date.fromLocaleString(Qt.locale(), value, Locale.ShortFormat)
+        selectedDate = Date.fromLocaleDateString(Qt.locale(), value, "MM/dd/yyyy")
     }
 
     function clear() {

@@ -10,10 +10,9 @@ TableView {
     // Indicated currently selected column
     property int currentColumn: -1
     property int rowHeight: 0
-    property alias workerScriptSource: lazyDataLoader.source
+    property alias workerScriptSource: workspaceTableModel.workerScriptSource
 
-    signal editRow(int modelIndex, ListModel model)
-    signal workerScriptMessage(var message)
+    signal editRow(int modelIndex, WorkspaceTableModel model)
 
     function setCurrentCell(row, column) {
         currentRow = row
@@ -26,23 +25,10 @@ TableView {
     function stepRight() { currentColumn = Math.min(tableView.columnCount - 1, currentColumn + 1 ) }
     function stepDown() { currentRow = Math.min(tableView.rowCount - 1, currentRow + 1) }
 
-    function upsert(modelIndex, element) {
-        if (modelIndex === -1) {
-            __addElement(element)
-        } else {
-            __updateElement(modelIndex, element)
-        }
-    }
-
-    // ListModel belongs to this table.
+    // Model belongs to this table.
     // It is instantiated together with root and populated with
     // WorkerScript inside it.
-    model: ListModel {
-        onCountChanged: {
-            resizeColumnsToContents()
-            positionViewAtRow(count - 1, ListView.Visible)
-        }
-    }
+    model: workspaceTableModel
 
     rowDelegate: Item {
         // Bottom border of the row
@@ -64,7 +50,7 @@ TableView {
     selectionMode: SelectionMode.ExtendedSelection
 
     onDoubleClicked: {
-        editRow(row, model)
+        editRow(row, workspaceTableModel)
     }
 
     Keys.onPressed: {
@@ -84,51 +70,23 @@ TableView {
     }
 
     Component.onCompleted: {
-        lazyDataLoader.sendMessage('load data')
         forceActiveFocus()
+    }
+
+    WorkspaceTableModel {
+        id: workspaceTableModel
+        onCountChanged: {
+            resizeColumnsToContents()
+            positionViewAtRow(count - 1, ListView.Visible)
+        }
     }
 
     Menu {
         id: contextMenu
-
         MenuItem {
             text: qsTr("Edit...")
-            onTriggered: editRow(currentRow, model)
+            onTriggered: editRow(currentRow, workspaceTableModel)
         }
-    }
-
-    WorkerScript {
-        id: lazyDataLoader
-        onMessage: {
-            if (messageObject.messageType === "data") {
-                workerScriptMessage(messageObject.data)
-            } else if (messageObject.messageType === "finished") {
-                // add enough empty rows
-//                var viewHeight = tableView.height
-//                var bufferRowsCount = (viewHeight / rowHeight) - 4
-//                for (var i = 0; i < bufferRowsCount; i++) {
-//                    var bufferElement = {}
-//                    for (var j = 0; j < columnCount; j++) {
-//                        var columnRole = getColumn(j).role
-//                        bufferElement[columnRole] = ""
-//                    }
-
-//                    __addElement(bufferElement)
-//                }
-            }
-        }
-    }
-
-    function __updateElement(modelIndex, element) {
-        model.set(modelIndex, element)
-    }
-
-    function __addElement(element) {
-        model.append(element)
-    }
-
-    function __getElement(modelIndex) {
-        return model.get(modelIndex)
     }
 
     function __getCurrentRole(columnIndex) {
@@ -152,12 +110,12 @@ TableView {
 
     function __updateModelWithResultOfEditing(row, column, text) {
         // Obtain current element
-        var element = __getElement(row)
+        var element = workspaceTableModel.get(row)
         // Find out which role this cell is displaying
         var role = __getCurrentRole(column)
         // Set new value to the element
         var updatedElement = __setElementField(element, role, text)
         // Update the model
-        upsert(row, updatedElement)
+        workspaceTableModel.upsert(row, updatedElement)
     }
 }

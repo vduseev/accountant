@@ -14,7 +14,7 @@ Rectangle {
     // TransactionTable, so it is shared between TransactionTable
     // and TransactionView.
     // If TransactionTable will be closed model will be preserved.
-    property ListModel model
+    property WorkspaceTableModel model
 
     // modelIndex is set when TransactionView is instantiated.
     // It is used when submit signal is emitted as parameter to signal.
@@ -47,20 +47,12 @@ Rectangle {
 
     function __submit() {
         var element = __getElementFromFields()
-        __updateModelWithElement(element)
+        model.upsert(modelIndex, element)
         submit(modelIndex, element)
     }
 
     function __cancel() {
         cancel()
-    }
-
-    function __updateModelWithElement(element) {
-        if (modelIndex == -1) {
-            workspaceView.model.append(element)
-        } else {
-            workspaceView.model.set(modelIndex, element)
-        }
     }
 
     function __setFieldsUsingExistingElement(element) {

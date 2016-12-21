@@ -11,9 +11,4 @@ WorkspaceTable {
     TableViewColumn { role: "account_description";  title: "Description" }
 
     workerScriptSource: "lazyAccountLoader.js"
-
-    onWorkerScriptMessage: {
-        var listModelItem = message
-        accountTable.model.append(listModelItem)
-    }
 }

@@ -26,10 +26,4 @@ WorkspaceTable {
     TableViewColumn { role: "description";      title: "Description" }
 
     workerScriptSource: "lazyTransactionLoader.js"
-
-    onWorkerScriptMessage: {
-        var listModelItem = message
-        //listModelItem.date = message.date.toLocaleDateString(Qt.locale())
-        transactionTable.model.append(listModelItem)
-    }
 }
