@@ -9,7 +9,7 @@ Item {
     signal editingFinished(string text)
 
     // implicitWidth is required for call of function resizeToContents() of TableViewColumn
-    implicitWidth: cellText.width + 2 * cellText.anchors.leftMargin
+    implicitWidth: cellTextMetrics.width + 2 * cellText.anchors.leftMargin + cellText.anchors.rightMargin
 
     // Z index is incremented for current cell, so that it's shadow overlaps neighbor cells
     z: zIncrementForRow + zIncrementForColumn
@@ -35,6 +35,14 @@ Item {
         border.width: 2
     }
 
+    TextMetrics {
+        id: cellTextMetrics
+        text: cellText.text
+        font: cellText.font
+        elideWidth: cellText.width
+        elide: Text.ElideRight
+    }
+
     Text {
         id: cellText
         text: styleData.value
@@ -44,6 +52,8 @@ Item {
             verticalCenter: parent.verticalCenter
             left: parent.left
             leftMargin: 10
+            right: parent.right
+            rightMargin: 10
         }
     }
 
@@ -80,6 +90,7 @@ Item {
     MouseArea {
         anchors.fill: parent
         acceptedButtons: Qt.LeftButton | Qt.RightButton
+
         onClicked: {
             // Select clicked cell
             setCurrentCell(styleData.row, styleData.column)
@@ -88,6 +99,7 @@ Item {
                 contextMenu.popup()
             }
         }
+
         onDoubleClicked: {
             cellEditorLoader.active = true
         }

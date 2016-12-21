@@ -55,6 +55,9 @@ TableView {
             __updateModelWithResultOfEditing(styleData.row, styleData.column, text)
             resizeColumnsToContents()
         }
+        Component.onCompleted: {
+            resizeColumnsToContents()
+        }
     }
 
     selectionMode: SelectionMode.ExtendedSelection
@@ -98,17 +101,17 @@ TableView {
                 workerScriptMessage(messageObject.data)
             } else if (messageObject.messageType === "finished") {
                 // add enough empty rows
-                var viewHeight = tableView.height
-                var bufferRowsCount = (viewHeight / rowHeight) - 4
-                for (var i = 0; i < bufferRowsCount; i++) {
-                    var bufferElement = {}
-                    for (var j = 0; j < columnCount; j++) {
-                        var columnRole = getColumn(j).role
-                        bufferElement[columnRole] = ""
-                    }
+//                var viewHeight = tableView.height
+//                var bufferRowsCount = (viewHeight / rowHeight) - 4
+//                for (var i = 0; i < bufferRowsCount; i++) {
+//                    var bufferElement = {}
+//                    for (var j = 0; j < columnCount; j++) {
+//                        var columnRole = getColumn(j).role
+//                        bufferElement[columnRole] = ""
+//                    }
 
-                    __addElement(bufferElement)
-                }
+//                    __addElement(bufferElement)
+//                }
             }
         }
     }
