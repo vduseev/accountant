@@ -6,3 +6,6 @@ Fri 16 Dec 05:51
 + Implement resize column to contents
 - Implement calendar over date cell
 - Implement cell edit when user starts typing text in selected cell
+
+Wed 21 Dec 01:21
+- Text should be cropped when column is resized
