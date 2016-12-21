@@ -81,10 +81,6 @@ TableView {
             stepDown()
             event.accepted = true
         }
-
-        console.log("key pressed in table view:", event.key)
-
-        //event.accepted = true
     }
 
     Component.onCompleted: {

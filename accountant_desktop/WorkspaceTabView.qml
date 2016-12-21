@@ -83,6 +83,7 @@ TabView {
                     leftMargin: 12
                 }
                 text: styleData.title
+                //color: styleData.selected ? tabPalette.windowText : tabPalette.dark
             }
 
             MobileControls.Button {
