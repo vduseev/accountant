@@ -141,7 +141,7 @@ TableView {
     function __setElementField(element, role, value) {
         var updatedElement = element
         if (role.indexOf("date") > -1) {
-            updatedElement[role] = value.toLocaleString(Locale.ShortFormat)
+            updatedElement[role] = value // value.toLocaleString(Locale.ShortFormat) - no need since everything in a model stored as a text
         } else if (role.indexOf("amount") > -1) {
             updatedElement[role] = value /* parseFloat(value) */
         } else {

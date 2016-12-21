@@ -14,5 +14,6 @@
         <file>LabeledTextArea.qml</file>
         <file>TextInputCell.qml</file>
         <file>WorkspaceTableCell.qml</file>
+        <file>CalendarCell.qml</file>
     </qresource>
 </RCC>

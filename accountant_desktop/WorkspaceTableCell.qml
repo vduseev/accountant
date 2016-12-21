@@ -22,7 +22,7 @@ Item {
             event.key >= 0x30 && event.key <= 0x39 ||
             event.key === Qt.Key_F2)
         {
-            cellEditorLoader.active = true
+            __activateLoaders()
             event.accepted = true
         }
     }
@@ -77,23 +77,41 @@ Item {
         Keys.forwardTo: [cellDelegate]
     }
 
+    Loader {
+        id: calendarLoader
+        anchors {
+            left: parent.left
+            top: parent.bottom
+        }
+
+        z: cellDelegate.z + 1
+        active: false
+        asynchronous: true
+        source: "CalendarCell.qml"
+    }
+
     Connections {
         target: cellEditorLoader.item
-        onReturnPressed: cellEditorLoader.active = false
-        onEscapePressed: cellEditorLoader.active = false
+        onReturnPressed: __deactivateLoaders()
+        onEscapePressed: __deactivateLoaders()
         onEditingFinished: cellDelegate.editingFinished(text)
+    }
+
+    Connections {
+        target: calendarLoader.item
+        onEditingFinished: { __deactivateLoaders(); cellDelegate.editingFinished(text) }
     }
 
     Connections {
         target: tableView
         onCurrentColumnChanged: {
             if (cellEditorLoader.active && styleData.column !== currentColumn) {
-                cellEditorLoader.active = false
+                __deactivateLoaders()
             }
         }
         onCurrentRowChanged: {
             if (cellEditorLoader.active && styleData.row !== currentRow) {
-                cellEditorLoader.active = false
+                __deactivateLoaders()
             }
         }
     }
@@ -111,8 +129,20 @@ Item {
             }
         }
 
-        onDoubleClicked: {
-            cellEditorLoader.active = true
+        onDoubleClicked: __activateLoaders()
+    }
+
+    function __activateLoaders() {
+        cellEditorLoader.active = true
+
+        var role = tableView.getColumn(currentColumn).role
+        if (role.indexOf("date") > -1) {
+            calendarLoader.active = true
         }
+    }
+
+    function __deactivateLoaders() {
+        cellEditorLoader.active = false
+        calendarLoader.active = false
     }
 }

@@ -29,7 +29,7 @@ WorkspaceTable {
 
     onWorkerScriptMessage: {
         var listModelItem = message
-        listModelItem.date = message.date.toLocaleString(Locale.ShortFormat)
+        //listModelItem.date = message.date.toLocaleDateString(Qt.locale())
         transactionTable.model.append(listModelItem)
     }
 }

@@ -4,7 +4,7 @@ Fri 16 Dec 05:51
 - TableView should display empty rows at the end just like usual spreadsheet editor
 + Rows in TableView should be editable
 + Implement resize column to contents
-- Implement calendar over date cell
++ Implement calendar over date cell
 + Implement cell edit when user starts typing text in selected cell
 
 Wed 21 Dec 01:21

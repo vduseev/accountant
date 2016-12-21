@@ -1,7 +1,10 @@
 WorkerScript.onMessage = function(message) {
     for (var i = 0; i < 50; ++i) {
+        var day = i % 29 + 1
+        var dayString = day < 10 ? "0" : ""
+        dayString += day.toString()
         var transaction = {
-            "date": new Date("November " + (i % 30 + 1) + ", 2016 03:24:00"), //.toLocaleString(QtCommon.Locale.ShortFormat),
+            "date": "11/" + dayString + "/2016",
 
             "from_account":     "ING Visa",
             "to_account":       "JetBrains",
