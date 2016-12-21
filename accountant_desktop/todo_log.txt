@@ -9,3 +9,5 @@ Fri 16 Dec 05:51
 
 Wed 21 Dec 01:21
 + Text should be cropped when column is resized
+- User should be able to drag rows to reorder them
+- Combined amount-currency cell
