@@ -1,0 +1,123 @@
+@startuml
+start
+
+:Start app;
+
+'Remain on transaction table'
+split
+  :View Transaction Table;
+
+  'Create transaction through application menu'
+  split
+    :Click menu "Transactions" -> "Create new transaction...";
+    #lightgreen:Add Transaction tab opens automatically]
+
+  'Create transaction in transaction table'
+  split again
+    :Add transaction directly in list;
+
+    split
+      :Insert new row;
+      #lightgreen:New row is inserted]
+    split again
+      :Use empty row;
+    end split
+
+  end split
+
+  partition "Fill data fields" {
+    if (Have specific date?) then (yes)
+      :Specify transaction date;
+    else (no)
+      #lightgreen:Current app date will be used]
+    endif
+
+    :Specify withdrowal account;
+    :Specify deposit account;
+    :Specify payment amount and currency;
+    :Specify blocked amount and currency;
+    :Specify actually withdrown amount and currency;
+
+    if (Have transaction description?) then (yes)
+      :Specify transaction description;
+    else (no)
+    endif
+  }
+
+  if (How transaction was added?) then (In view)
+    if (Add this transaction?) then (yes)
+      :Click "Submit" button;
+    else (no)
+      split
+        :Close "Add Transaction" tab;
+      split again
+        :Click "Cancel" button;
+      split again
+        :...;
+        detach
+      end split
+      #lightgreen:Transaction View will be closed]
+      detach
+    endif
+  else (In table)
+  endif
+
+  #lightgreen:Model automatically updated]
+  #lightgreen:Call to API "add transaction"]
+  #cyan:Return new ID]
+  #lightgreen:Set ID to added transaction]
+
+'Switch to Accounts table'
+split again
+  :Switch to Accounts;
+
+  'Create account through application menu'
+  split
+    :Click menu "Accounts" -> "Create new account...";
+
+    partition "Fill data fields" {
+      :Specify account name;
+
+      if (Have account description?) then (yes)
+        :Specify account description;
+      else (no)
+      endif
+    }
+
+    if (Add this account?) then (yes)
+      :Click "Submit" button;
+    else (no)
+      split
+        :Close "Add Account" tab;
+      split again
+        :Click "Cancel" button;
+      split again
+        :...;
+      end split
+    endif
+
+  'Create account in account table'
+  split again
+    :Add account directly in list;
+
+    split
+      :Insert new row;
+    split again
+      :Use empty row;
+    end split
+
+    partition "Fill data fields" {
+      :Specify account name;
+
+      if (Have account description?) then (yes)
+        :Specify account description;
+      else (no)
+      endif
+    }
+
+  end split
+
+end split
+
+end
+@enduml

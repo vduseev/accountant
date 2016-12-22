@@ -5,23 +5,26 @@ start
 
 :Click menu "Transactions" -> "Create new transaction...";
 
-:Specify withdrowal account;
-:Specify deposit account;
-:Specify payment amount and currency;
-:Specify blocked amount and currency;
-:Specify actually withdrown amount and currency;
+partition "Fill data fields" {
+  :Specify withdrowal account;
+  :Specify deposit account;
+  :Specify payment amount and currency;
+  :Specify blocked amount and currency;
+  :Specify actually withdrown amount and currency;
 
-if (Have transaction description?) then (yes)
-  :Specify transaction description;
-endif
+  if (Have transaction description?) then (yes)
+    :Specify transaction description;
+  else (no)
+  endif
 
-:Specify transaction date;
+  :Specify transaction date;
+}
 
-if (Add transaction?) then (yes)
+if (Add this transaction?) then (yes)
   :Click "Submit" button;
 else (no)
   fork
-    :Close Add Transaction tab;
+    :Close "Add Transaction" tab;
   fork again
     :Click "Cancel" button;
   end fork
