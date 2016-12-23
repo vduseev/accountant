@@ -12,37 +12,84 @@ split
     :Click menu "Transactions" -> "Create new transaction...";
     #lightgreen:Add Transaction tab opens automatically]
 
+    partition "Fill data fields" {
+      if (Have specific date?) then (yes)
+        :Specify transaction date;
+      else (no)
+        #lightgreen:Current app date will be used]
+      endif
+
+      :Specify withdrowal account;
+      :Specify deposit account;
+      :Specify payment amount and currency;
+      :Specify blocked amount and currency;
+      :Specify actually withdrown amount and currency;
+
+      if (Have transaction description?) then (yes)
+        :Specify transaction description;
+      else (no)
+      endif
+    }
+
   'Create transaction in transaction table'
   split again
     :Add transaction directly in list;
 
     split
-      :Insert new row;
-      #lightgreen:New row is inserted]
+      partition "Insert new row" {
+        :Right click on any row in table;
+        split
+          :Select "Insert row above...";
+          #lightgreen:Empty row inserted above clicked row]
+        split again
+          :Select "Insert row below...";
+          #lightgreen:Empty row inserted below clicked row]
+        end split
+      }
     split again
-      :Use empty row;
+      :Use existing empty row in table;
     end split
 
+    partition "Fill row cells with data" {
+      while (Have data available?) is (available)
+        partition "Activate Edit mode of the cell" {
+          split
+            :Double click on desired cell;
+          split again
+            'navigate to desired cell'
+            split
+              :Click on desired cell;
+            split again
+              :Navigate with keys to desired cell;
+            end split
+            :Start typing in selected cell;
+          end split
+        }
+
+        if (Have specific transaction date?) then (yes)
+          split
+            :Fill data as a string;
+          split again
+            :Choose data from calendar popup;
+          end split
+        else (no)
+          #lightgreen:Current app date will be used]
+        endif
+      endwhile (all done)
+
+      :Specify withdrowal account;
+      :Specify deposit account;
+      :Specify payment amount and currency;
+      :Specify blocked amount and currency;
+      :Specify actually withdrown amount and currency;
+
+      if (Have transaction description?) then (yes)
+        :Specify transaction description;
+      else (no)
+      endif
+    }
+
   end split
-
-  partition "Fill data fields" {
-    if (Have specific date?) then (yes)
-      :Specify transaction date;
-    else (no)
-      #lightgreen:Current app date will be used]
-    endif
-
-    :Specify withdrowal account;
-    :Specify deposit account;
-    :Specify payment amount and currency;
-    :Specify blocked amount and currency;
-    :Specify actually withdrown amount and currency;
-
-    if (Have transaction description?) then (yes)
-      :Specify transaction description;
-    else (no)
-    endif
-  }
 
   if (How transaction was added?) then (In view)
     if (Add this transaction?) then (yes)

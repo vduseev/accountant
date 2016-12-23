@@ -3,20 +3,27 @@
 'actors
 actor :User: as user
 actor :App: as app #lightgreen
-actor :API: as api
-actor :DB: as db
+actor :API: as api #yellow
+actor :DB: as db #cyan
 
-'main usecases
+'USER usecases'
 usecase (View Transactions) as uc_view_transactions
 usecase (View Transaction) as uc_view_transaction
 usecase (Add Transaction) as uc_add_transaction
 usecase (Edit Transaction) as uc_edit_transaction
 usecase (Delete Transaction) as uc_delete_transaction
 
+'APP usecases'
 usecase (Transaction List) as uc_transaction_list #lightgreen
 usecase (Transaction View) as uc_transaction_view #lightgreen
+usecase (Transaction Model) as uc_transaction_model #lightgreen
 
-'scenario
+'APP provides'
+app --> uc_transaction_list : provides
+app --> uc_transaction_view : provides
+app --> uc_transaction_model : provides
+
+'USER uses'
 user --> uc_view_transactions
 user --> uc_add_transaction
 user --> uc_edit_transaction
@@ -25,20 +32,48 @@ user --> uc_delete_transaction
 'additional'
 uc_view_transactions --> uc_view_transaction : includes
 
-'transaction list'
-app --> uc_transaction_list : provides
+'transaction list is used by'
 uc_view_transactions --> uc_transaction_list : uses
 uc_add_transaction --> uc_transaction_list : uses
 uc_edit_transaction --> uc_transaction_list : uses
 uc_delete_transaction --> uc_transaction_list : uses
 
-'transaction view'
-app --> uc_transaction_view : provides
+'transaction view is used by'
 uc_view_transaction --> uc_transaction_view : uses
 uc_add_transaction --> uc_transaction_view : uses
 uc_edit_transaction --> uc_transaction_view : uses
 uc_delete_transaction --> uc_transaction_view : uses
 
+'transaction model is used by'
+uc_transaction_list --> uc_transaction_model : uses
+uc_transaction_view --> uc_transaction_model : uses
 
+'API usecases'
+usecase (Post Transaction) as uc_api_post_transaction #yellow
+usecase (Put Transaction) as uc_api_put_transaction #yellow
+usecase (Delete Transaction) as uc_api_delete_transaction #yellow
+usecase (Get Transaction) as uc_api_get_transaction #yellow
+usecase (Get Transactions) as uc_api_get_transactions #yellow
+
+'API provides'
+api --> uc_api_post_transaction : provides
+api --> uc_api_put_transaction : provides
+api --> uc_api_delete_transaction : provides
+api --> uc_api_get_transactions : provides
+api --> uc_api_get_transaction : provides
+
+'API is used by'
+uc_transaction_model --> uc_api_get_transaction : uses
+uc_transaction_model --> uc_api_get_transactions : uses
+uc_transaction_model --> uc_api_put_transaction : uses
+uc_transaction_model --> uc_api_delete_transaction : uses
+uc_transaction_model --> uc_api_post_transaction : uses
+
+'API uses'
+uc_api_post_transaction --> db : uses
+uc_api_put_transaction --> db : uses
+uc_api_delete_transaction --> db : uses
+uc_api_get_transactions --> db : uses
+uc_api_get_transaction --> db : uses
 
 @enduml
