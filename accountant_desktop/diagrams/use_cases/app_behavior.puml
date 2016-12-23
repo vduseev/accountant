@@ -1,0 +1,49 @@
+@startuml
+
+skinparam usecase {
+	BackgroundColor<<app>> #2ecc71
+	BorderColor<<app>> #27ae60
+
+	BackgroundColor<<user>> #e74c3c
+	BorderColor<<user>> #c0392b
+
+  BackgroundColor<<api>> #3498db
+  BorderColor<<api>> #2980b9
+
+  BackgroundColor<<db>> #9b59b6
+  BorderColor<<db>> #8e44ad
+
+	ArrowColor black
+	ActorBorderColor black
+	ActorFontName Courier
+}
+
+'Basic app start'
+rectangle "App Start" {
+  usecase (Start App) as user_start_app <<user>>
+  usecase (Load Workspace) as app_load_workspace <<app>>
+  user_start_app --> app_load_workspace
+
+  'Load Transactions'
+  usecase (Load Transactions) as app_load_transactions <<app>>
+  app_load_workspace --> app_load_transactions
+
+  'Load Accounts'
+  usecase (Load Accounts) as app_load_accounts <<app>>
+  app_load_workspace --> app_load_accounts
+}
+
+'API'
+usecase (GET api/transactions) as api_get_transactions <<api>>
+usecase (GET api/accounts) as api_get_accounts <<api>>
+usecase (POST api/transactions) as api_post_transactions <<api>>
+usecase (POST api/accounts) as api_post_accounts <<api>>
+usecase (PUT api/transactions/<uuid>) as api_put_transaction <<api>>
+usecase (PUT api/accounts/<uuid>) as api_put_account <<api>>
+usecase (DELETE api/transactions/<uuid>) as api_delete_transactions <<api>>
+usecase (DELETE api/accounts/<uuid>) as api_delete_account <<api>>
+
+app_load_transactions <--> api_get_transactions
+app_load_accounts <--> api_get_accounts
+
+@enduml
