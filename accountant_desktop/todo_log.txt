@@ -10,7 +10,7 @@ Fri 16 Dec 05:51
 Wed 21 Dec 01:21
 + Text should be cropped when column is resized
 - User should be able to drag rows to reorder them
-- Combined amount-currency cell
+- Combined amount-currency cell (?)
 - Search field for WorkspaceTable
 - Model should communicate with REST services
     + Preload itself with data
@@ -18,3 +18,7 @@ Wed 21 Dec 01:21
     - Respond to search queries
     - Update records
     - Delete records
+- Describe API in swagger
+    - Learn swagger through specs and examples
+    - Describe API
+    - Create API in Amazon API Gateway

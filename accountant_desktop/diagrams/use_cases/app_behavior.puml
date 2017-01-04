@@ -28,10 +28,24 @@ rectangle "App Start" {
   usecase (Load Transactions) as app_load_transactions <<app>>
   app_load_workspace --> app_load_transactions
 
+  usecase (Populate Transaction Table) as app_load_transactions_fill_table <<app>>
+  app_load_transactions --> app_load_transactions_fill_table
+
+  usecase (View Transactions) as user_view_transactions <<user>>
+  app_load_transactions_fill_table --> user_view_transactions
+
   'Load Accounts'
   usecase (Load Accounts) as app_load_accounts <<app>>
   app_load_workspace --> app_load_accounts
+
+  usecase (Populate Account Table) as app_load_accounts_fill_table <<app>>
+  app_load_accounts --> app_load_accounts_fill_table
 }
+
+usecase (Click "Transactions \n Create new transaction..." in menu) as user_menu_transactions_create_new <<user>>
+
+usecase (Open "Add Transaction" Tab) as app_open_add_transaction_tab <<app>>
+user_menu_transactions_create_new --> app_open_add_transaction_tab
 
 'API'
 usecase (GET api/transactions) as api_get_transactions <<api>>
@@ -43,7 +57,7 @@ usecase (PUT api/accounts/<uuid>) as api_put_account <<api>>
 usecase (DELETE api/transactions/<uuid>) as api_delete_transactions <<api>>
 usecase (DELETE api/accounts/<uuid>) as api_delete_account <<api>>
 
-app_load_transactions <--> api_get_transactions
-app_load_accounts <--> api_get_accounts
+app_load_transactions <..> api_get_transactions
+app_load_accounts <..> api_get_accounts
 
 @enduml
