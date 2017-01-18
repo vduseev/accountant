@@ -18,6 +18,8 @@ Wed 21 Dec 01:21
     - Respond to search queries
     - Update records
     - Delete records
+
+Sun 1 Jan 12:19
 - Describe API in swagger
     - Learn swagger through specs and examples
     - Describe API

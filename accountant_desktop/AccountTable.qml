@@ -7,8 +7,9 @@ WorkspaceTable {
 
     readonly property string viewType: "accountTable"
 
-    TableViewColumn { role: "account_name";         title: "Name" }
-    TableViewColumn { role: "account_description";  title: "Description" }
+    TableViewColumn { role: "name";         title: "Name" }
+    TableViewColumn { role: "currency";     title: "CUR" }
+    TableViewColumn { role: "description";  title: "Description" }
 
     workerScriptSource: "lazyAccountLoader.js"
 }

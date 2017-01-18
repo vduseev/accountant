@@ -19,16 +19,25 @@ WorkspaceView {
 
         LabeledTextField {
             id: accountName
-            roles: ["account_name"]
+            roles: ["name"]
             labelText: qsTr("Account Name")
             placeholderText: qsTr("Account name...")
             height: textFieldHeight
             Layout.fillWidth: true
         }
 
+        LabeledTextField {
+            id: accountCurrency
+            roles: ["currency"]
+            labelText: qsTr("Account Currency")
+            placeholderText: qsTr("Account Currency...")
+            height: textFieldHeight
+            Layout.fillWidth: true
+        }
+
         LabeledTextArea {
             id: accountDescription
-            roles: ["account_description"]
+            roles: ["description"]
             Layout.preferredHeight: 55
             Layout.minimumHeight: 20
             Layout.fillWidth: true

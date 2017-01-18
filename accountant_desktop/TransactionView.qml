@@ -6,7 +6,7 @@ WorkspaceView {
     id: transactionView
 
     readonly property string viewType: "transactionView"
-    fields: [fromAccount, toAccount, paymentAmount, blockedAmount, actualAmount, dateTimePicker, description]
+    fields: [fromAccount, toAccount, paymentAmount, processingAmount, paymentDatePicker, processingDatePicker, description]
 
     ColumnLayout {
         id: mainLayoutColumn
@@ -54,32 +54,33 @@ WorkspaceView {
                     Layout.fillWidth: true
                 }
 
-                LabeledAmountCurrencyField {
-                    id: blockedAmount
-                    roles: ["blocked_amount", "blocked_currency"]
-                    labelText: qsTr("Blocked Amount")
-                    amountPlaceholderText: "0.00"
-                    currencyPlaceholderText: "USD"
-                    height: textFieldHeight
-                    Layout.fillWidth: true
-                }
-
-                LabeledAmountCurrencyField {
-                    id: actualAmount
-                    roles: ["actual_amount", "actual_currency"]
-                    labelText: qsTr("Actual Amount")
-                    amountPlaceholderText: "0.00"
-                    currencyPlaceholderText: "USD"
+                LabeledTextField {
+                    id: processingAmount
+                    roles: ["processing_amount"]
+                    labelText: qsTr("Processing Amount")
+                    placeholderText: "0.00"
                     height: textFieldHeight
                     Layout.fillWidth: true
                 }
             }
 
-            LabeledDateTimePicker {
-                id: dateTimePicker
-                roles: ["date"]
-                labelText: qsTr("Transaction Date")
-                Layout.alignment: Qt.AlignTop
+            ColumnLayout {
+                id: datesColumn
+                spacing: 10
+
+                LabeledDateTimePicker {
+                    id: paymentDatePicker
+                    roles: ["payment_date"]
+                    labelText: qsTr("Transaction Date")
+                    Layout.alignment: Qt.AlignTop
+                }
+
+                LabeledDateTimePicker {
+                    id: processingDatePicker
+                    roles: ["processing_date"]
+                    labelText: qsTr("Processing Date")
+                    Layout.alignment: Qt.AlignTop
+                }
             }
         }
 
