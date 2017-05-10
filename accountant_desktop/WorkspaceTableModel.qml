@@ -15,10 +15,12 @@ ListModel {
 
     function addElement(element) {
         append(element)
+        // Handle API integration here
     }
 
     function updateElement(modelIndex, element) {
         set(modelIndex, element)
+        // Handle API integration here
     }
 
     function deleteElement(modelIndex) {

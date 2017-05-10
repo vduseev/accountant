@@ -14,14 +14,4 @@ WorkerScript.onMessage = function(message) {
 
     xmlhttp.open("GET", url, true);
     xmlhttp.send();
-
-//    for (var i = 0; i < 50; i++) {
-//        var account = {
-//            "account_name":         "ING Visa",
-//            "account_currency":     "PLN",
-//            "account_description":  "MY Poland card"
-//        }
-
-//        WorkerScript.sendMessage({ "messageType": "data", "data": account })
-//    }
 }
