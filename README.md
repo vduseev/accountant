@@ -1,2 +1,80 @@
-# accountant
-Multiplatform accounting software synchronised via cloud.
+# The Accountant
+Multiplatform accounting software synchronized via cloud.
+
+## Highlights
+* [ ] Custom data importers from ING and Tinkoff
+
+## Development Plan
+* [x] Prototype database scheme using Google Sheets *(Done 12/02/17)*
+  * [x] Accounts, Transactions, Currencies
+    * [ ] You can always optimize later for more tables
+* [ ] Describe design alternatives
+  * [ ] Use Google Sheets as DB backend
+  * [ ] Use Firestore NoSQL storage
+  * [ ] Use SQL database hosted somewhere
+    * [ ] Use auto-increment IDs instead of GUIDs
+      * [ ] You can always switch to GUIDs later
+    * [ ] Use SQLite DB for prototyping locally
+    * [ ] After nice testing move data to remote DB
+    * [ ] Use MySQL/PostgreSQL hosted on VPS
+      * [ ] Regular backups to some location
+    * [ ] Use Amazon's $10 PostgreSQL
+* [ ] Lay out REST API to work with database
+  * [x] Install Swagger Editor *(Done 12/04/17)*
+  * [x] Study OpenAPI 3.0.0 specification *(Done 12/05/17)*
+    * [x] Learn how to describe API info *(Done 12/04/17)*
+    * [x] Learn how to describe data models *(Done 12/04/17)*
+    * [x] Learn how to describe request body *(Done 12/04/17)*
+    * [x] Learn how to specify that ID is required for responses only *(Done 12/04/17)*
+  * [ ] First, describe all necessary endpoints using OpenAPI spec
+    * [ ] Describe data models
+      * [x] Transaction *(Done 12/04/17)*
+      * [x] Account *(Done 12/05/17)*
+      * [x] Counterparty *(Done 12/05/17)*
+      * [x] Currency *(Done 12/05/17)*
+      * [ ] Balance
+    * [x] Transactions
+      * [x] addTransaction *(Done 12/05/17)*
+      * [x] getTransactions *(Done 12/05/17)*
+      * [x] getTransactionById *(Done 12/05/17)*
+      * [x] updateTransactionById *(Done 12/05/17)*
+      * [x] deleteTransactionById *(Done 12/05/17)*
+    * [x] Accounts *(Done 12/05/17)*
+      * [x] addAccount *(Done 12/05/17)*
+      * [x] getAccounts *(Done 12/05/17)*
+      * [x] getAccountById *(Done 12/05/17)*
+      * [x] updateAccountById *(Done 12/05/17)*
+      * [x] deleteAccountById *(Done 12/05/17)*
+    * [x] Counterparties *(Done 12/05/17)*
+      * [x] addCounterparty *(Done 12/05/17)*
+      * [x] getCounterparties *(Done 12/05/17)*
+      * [x] getCounterpartyById *(Done 12/05/17)*
+      * [x] updateCounterpartyById *(Done 12/05/17)*
+      * [x] deleteCounterpartyById *(Done 12/05/17)*
+    * [x] Currencies
+      * [ ] *addCurrency*
+      * [x] getCurrencies *(Done 12/05/17)*
+      * [x] getCurrencyById *(Done 12/05/17)*
+      * [ ] *updateCurrencyById*
+      * [ ] *deleteCurrencyById*
+* [ ] Implement SQLite schema creation scripts
+  * [ ] Add several basic currencies manually
+* [x] Install Swagger Codegen and generate Flask API
+  (3.0.0 is not implemented yet in Codegen)
+* [ ] Implement REST API using Python and Flask
+* [ ] Integrate REST API into existing Desktop Qt Client
+* [ ] Implement data importer for ING
+  * [ ] Design data flow
+  * [ ] Design algorithm
+    * [ ] Find a way around transactions that are imported twice
+    * [ ] Some imported transactions might not be accounted yet.
+      Need to find a way to update them when new import is done.
+    * [ ] Transactions with early hold and late accounted dates are listed
+      two times.
+* [ ] Implement data importer for Tinkoff
+* [ ] Implement data uploader from older records in Google Sheets
+* [ ] Implement PostgreSQL schema
+* [ ] Implement API using Amazon's Lambda functions and Gateways
+* [ ] Implement Mobile App using Flutter
+* [ ] Incorporate ElasticSearch for faster search through transaction
+  details and descriptions
