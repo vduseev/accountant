@@ -24,3 +24,12 @@ class Currency(DeclarativeModelBaseClass):
             warehoused_at=self.warehoused_at,
             updated_at=self.updated_at
         )
+
+    def to_reference_dict(self):
+        return dict(
+            id=str(self.id),
+            name=self.name,
+            code=self.code,
+            num=self.num,
+            digits_after_decimal=self.digits_after_decimal
+        )

@@ -30,7 +30,13 @@ class Counterparty(DeclarativeModelBaseClass):
             details=self.details,
             warehoused_at=self.warehoused_at,
             updated_at=self.updated_at,
-            source_id=self.source_id
+            source_id=self.source.to_reference_dict()
+        )
+
+    def to_reference_dict(self):
+        return dict(
+            id=str(self.id),
+            name=self.name
         )
 
     @staticmethod
