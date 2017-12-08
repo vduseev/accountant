@@ -4,8 +4,8 @@ from sqlalchemy import Table, Column, ForeignKey
 from sqlalchemy.dialects.postgresql import UUID, TEXT, REAL, TIMESTAMP
 from sqlalchemy.orm import mapper
 
-from models.database import metadata, db_session
-from models.initialization_exc import ModelInitializationError
+from database_orm.database import metadata, db_session
+from database_orm.initialization_exc import ModelInitializationError
 
 
 class Transaction:

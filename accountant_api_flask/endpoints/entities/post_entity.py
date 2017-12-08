@@ -1,8 +1,8 @@
 from app import app
 from flask import request
-from models.entity import Entity
-from models.initialization_exc import ModelInitializationError
-from models.database import db_session
+from database_orm.counterparty import Counterparty
+from database_orm.initialization_exc import ModelInitializationError
+from database_orm.database import db_session
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.exc import ProgrammingError
 from endpoints.entities import basic_response
@@ -24,7 +24,7 @@ def post_entity():
     else:
         try:
             # Initialize entity (exception will be thrown is JSON is not valid)
-            entity = Entity(entity_data_from_request)
+            entity = Counterparty(entity_data_from_request)
             # Add to database (exception will be thrown from database if smth is wrong)
             db_session.add(entity)
             db_session.commit()

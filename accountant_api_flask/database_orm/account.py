@@ -1,23 +1,22 @@
 from uuid import uuid4
 
-from sqlalchemy import Table, Column, String, ForeignKey
-from sqlalchemy.dialects.postgresql import UUID, TEXT, REAL
+from sqlalchemy import Column, BIGINT, TEXT
 from sqlalchemy.orm import mapper
 
-from models.database import metadata, db_session
-from models.initialization_exc import ModelInitializationError
+from database_orm import DeclarativeModelBaseClass
+from database_orm.initialization_exc import ModelInitializationError
 
 
-class Account:
-    query = db_session.query_property()
+class Account(DeclarativeModelBaseClass):
 
-    def __init__(self, name, desc, entity_id, currency_id, balance):
-        self.id = uuid4()
-        self.name = name
-        self.desc = desc
-        self.entity_id = entity_id
-        self.currency_id = currency_id
-        self.balance = balance
+    __tablename__ = 'accounts'
+    id = Column(BIGINT, primary_key=True),
+    name = Column(TEXT, nullable=False),
+    details = Column(TEXT, nullable=True),
+    currency_id = Column(BIGINT, nullable=False),
+    counterparty_id = Column(BIGINT, nullable=False),
+    warehoused_at = Column(TEXT, nullable=False)
+    updated_at = Column(TEXT, nullable=False)
 
     def __init__(self, account_as_dict):
         errors = Account.validate_initialization_dict(account_as_dict)
@@ -57,17 +56,3 @@ class Account:
         if len(account_as_dict.keys()) > 5:
             errors.append('Unwanted keys found')
         return errors
-
-accounts = Table(
-    'accounts',
-    metadata,
-    Column('id', UUID, primary_key=True),
-    Column('name', String(255), nullable=False),
-    Column('desc', TEXT, nullable=False),
-    Column('entity_id', UUID, ForeignKey('accounting.entities.id'), nullable=False),
-    Column('currency_id', UUID, ForeignKey('accounting.currencies.id'), nullable=False),
-    Column('balance', REAL, nullable=False),
-    schema='accounting'
-)
-
-mapper(Account, accounts)

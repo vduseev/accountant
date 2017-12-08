@@ -1,8 +1,8 @@
 from app import app
 from flask import request
-from models.currency import Currency
-from models.initialization_exc import ModelInitializationError
-from models.database import db_session
+from database_orm.currency import Currency
+from database_orm.initialization_exc import ModelInitializationError
+from database_orm.database import db_session
 from sqlalchemy.exc import IntegrityError, ProgrammingError
 from endpoints.currencies import basic_response
 from endpoints import status_codes

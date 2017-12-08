@@ -1,7 +1,7 @@
 from app import app
 from flask import request
-from models.entity import Entity
-from models.database import db_session
+from database_orm.counterparty import Counterparty
+from database_orm.database import db_session
 from sqlalchemy.exc import ArgumentError
 from endpoints import status_codes
 from endpoints.jsonify import jsonify
@@ -14,7 +14,7 @@ def get_entity(entity_id):
     response = basic_response.get_basic_response()
 
     # Query database for entity by id
-    entity = Entity.query.filter_by(id = entity_id).first()
+    entity = Counterparty.query.filter_by(id = entity_id).first()
 
     if entity is None:
         response['status']['code'] = status_codes.NOT_FOUND

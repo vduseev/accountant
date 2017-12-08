@@ -1,6 +1,6 @@
 from flask import Flask
-from models.database import db_session
-from models.database import init_db
+from database_orm.database import db_session
+from database_orm.database import init_db
 
 init_db()
 app = Flask(__name__)
