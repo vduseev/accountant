@@ -1,0 +1,880 @@
+openapi: 3.0.0
+info:
+  title: Accountant REST API
+  description: API Specification for the Accountant App
+  version: 0.1.0
+tags:
+  - name: transactions
+    description: Everything related to transaction manipulation
+  - name: accounts
+    description: Operations about accounts
+  - name: counterparties
+    description: Operations about counterparties
+  - name: currencies
+    description: Everything related to currencies manipulation
+  - name: balances
+    description: Access to calculatable balances
+paths:
+  /transactions:
+    post:
+      tags:
+        - transactions
+      summary: Add a new transaction.
+      description: >
+        Adds a new Transaction object to the system. Returns created object but
+        adds `id`, `warehoused_at`, and `updated_at` fields.
+      operationId: addTransaction
+      requestBody:
+        description: Transaction object to be added.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Transaction'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Transaction'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        default:
+          $ref: '#/components/responses/UnexpectedError'
+    get:
+      tags:
+        - transactions
+      summary: Return all transactions.
+      description: |
+        Returns a list of all transactions in the system.
+      operationId: getTransactions
+      parameters:
+        - $ref: '#/components/parameters/fromParam'
+        - $ref: '#/components/parameters/sizeParam'
+        - in: query
+          name: transactionedBefore
+          schema:
+            type: string
+            format: date-time
+          required: false
+          description: >
+            Return transactions that were transactioned up to this date. <br />
+            Search equation is `transactioned_at <= transactionedBefore`.
+        - in: query
+          name: transactionedAfter
+          schema:
+            type: string
+            format: date-time
+          required: false
+          description: >
+            Return transactions that were transactioned after this date. <br />
+            Search equation is `transactioned_at >= transactionedAfter`.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Transaction'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        default:
+          $ref: '#/components/responses/UnexpectedError'
+  '/transactions/{transaction_id}':
+    get:
+      tags:
+        - transactions
+      summary: Get one transaction by its ID.
+      description: Return single transaction object.
+      operationId: getTransactionById
+      parameters:
+        - $ref: '#/components/parameters/transactionIdParam'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Transaction'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        default:
+          $ref: '#/components/responses/UnexpectedError'
+    put:
+      tags:
+        - transactions
+      summary: Update one transaction by its ID.
+      description: Returns updated transaction object.
+      operationId: updateTransactionById
+      parameters:
+        - $ref: '#/components/parameters/transactionIdParam'
+      requestBody:
+        description: Updated transaction object.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Transaction'
+      responses:
+        '200':
+          description: Resource has been successfully updated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Transaction'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        default:
+          $ref: '#/components/responses/UnexpectedError'
+    delete:
+      tags:
+        - transactions
+      summary: Delete transaction by its ID.
+      description: Deletes transaction from the system.
+      operationId: deleteTransactionById
+      parameters:
+        - $ref: '#/components/parameters/transactionIdParam'
+      responses:
+        '204':
+          description: Resource has been successfully deleted.
+        '404':
+          $ref: '#/components/responses/NotFound'
+        default:
+          $ref: '#/components/responses/UnexpectedError'
+  /accounts:
+    post:
+      tags:
+        - accounts
+      summary: Add a new account.
+      description: >
+        Adds a new Account object to the system. Returns created object but adds
+        `id`, `warehoused_at`, and `updated_at` fields.
+      operationId: addAccount
+      requestBody:
+        description: Account object to be added.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Account'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Account'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        default:
+          $ref: '#/components/responses/UnexpectedError'
+    get:
+      tags:
+        - accounts
+      summary: Return all accounts.
+      description: Return all accounts.
+      operationId: getAccounts
+      parameters:
+        - $ref: '#/components/parameters/fromParam'
+        - $ref: '#/components/parameters/sizeParam'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Account'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        default:
+          $ref: '#/components/responses/UnexpectedError'
+  '/accounts/{account_id}':
+    get:
+      tags:
+        - accounts
+      summary: Get one account by its ID.
+      description: Return single account object.
+      operationId: getAccountById
+      parameters:
+        - $ref: '#/components/parameters/accountIdParam'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Account'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        default:
+          $ref: '#/components/responses/UnexpectedError'
+    put:
+      tags:
+        - accounts
+      summary: Update one account by its ID.
+      description: Returns updated account object.
+      operationId: updateAccountById
+      parameters:
+        - $ref: '#/components/parameters/accountIdParam'
+      requestBody:
+        description: Updated account object.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Account'
+      responses:
+        '200':
+          description: Resource has been successfully updated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Account'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        default:
+          $ref: '#/components/responses/UnexpectedError'
+    delete:
+      tags:
+        - accounts
+      summary: Delete account by its ID.
+      description: Deletes account from the system.
+      operationId: deleteAccountById
+      parameters:
+        - $ref: '#/components/parameters/accountIdParam'
+      responses:
+        '204':
+          description: Resource has been successfully deleted.
+        '404':
+          $ref: '#/components/responses/NotFound'
+        default:
+          $ref: '#/components/responses/UnexpectedError'
+  /counterparties:
+    post:
+      tags:
+        - counterparties
+      summary: Add a new counterparty.
+      description: >
+        Adds a new counterparty object to the system. Returns created object but
+        adds `id`, `warehoused_at`, and `updated_at` fields.
+      operationId: addCounterparty
+      requestBody:
+        description: Counterparty object to be added.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Counterparty'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Counterparty'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        default:
+          $ref: '#/components/responses/UnexpectedError'
+    get:
+      tags:
+        - counterparties
+      summary: Return all counterparties.
+      description: Return all counterparties.
+      operationId: getCounterparties
+      parameters:
+        - $ref: '#/components/parameters/fromParam'
+        - $ref: '#/components/parameters/sizeParam'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Counterparty'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        default:
+          $ref: '#/components/responses/UnexpectedError'
+  '/counterparties/{counterparty_id}':
+    get:
+      tags:
+        - counterparties
+      summary: Get one counterparty by its ID.
+      description: Return single counterparty object.
+      operationId: getCounterpartyById
+      parameters:
+        - $ref: '#/components/parameters/counterpartyIdParam'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Counterparty'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        default:
+          $ref: '#/components/responses/UnexpectedError'
+    put:
+      tags:
+        - counterparties
+      summary: Update one counterparty by its ID.
+      description: Returns updated counterparty object.
+      operationId: updateCounterpartyById
+      parameters:
+        - $ref: '#/components/parameters/counterpartyIdParam'
+      requestBody:
+        description: Updated counterparty object.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Counterparty'
+      responses:
+        '200':
+          description: Resource has been successfully updated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Counterparty'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        default:
+          $ref: '#/components/responses/UnexpectedError'
+    delete:
+      tags:
+        - counterparties
+      summary: Delete counterparty by its ID.
+      description: Deletes counterparty from the system.
+      operationId: deleteCounterpartyById
+      parameters:
+        - $ref: '#/components/parameters/counterpartyIdParam'
+      responses:
+        '204':
+          description: Resource has been successfully deleted.
+        '404':
+          $ref: '#/components/responses/NotFound'
+        default:
+          $ref: '#/components/responses/UnexpectedError'
+  /currencies:
+    get:
+      tags:
+        - currencies
+      summary: Return all currencies.
+      description: Return all currencies.
+      operationId: getCurrencies
+      parameters:
+        - $ref: '#/components/parameters/fromParam'
+        - $ref: '#/components/parameters/sizeParam'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Currency'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        default:
+          $ref: '#/components/responses/UnexpectedError'
+  '/currencies/{currency_id}':
+    get:
+      tags:
+        - currencies
+      summary: Get one currency by its ID.
+      description: Return single currency object.
+      operationId: getCurrencyById
+      parameters:
+        - $ref: '#/components/parameters/currencyIdParam'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Currency'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        default:
+          $ref: '#/components/responses/UnexpectedError'
+components:
+  schemas:
+    Transaction:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: The transaction ID.
+          readOnly: true
+        transactioned_at:
+          type: string
+          format: date-time
+          description: Transaction initiation time.
+        accounted_at:
+          type: string
+          format: date-time
+          description: |
+            Time at which money has been withdrawn from account.
+            - For cash payments it is equal to `transactioned_at`
+            - In bank transactions it usually represents the time
+              when 'hold' period is over and money is withdrawn.
+          nullable: true
+        warehoused_at:
+          type: string
+          format: date-time
+          description: Time at which transaction has been added to the system.
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          description: Time at which transaction has been last updated in the system.
+          readOnly: true
+        title:
+          type: string
+          description: |
+            Title of transaction.  Not necessarily the one provided by the bank.
+        details:
+          type: string
+          nullable: true
+          description: >
+            Any details describing the transaction. Format is not enforced, but
+            JSON object is recommended. Possible   properties are
+
+            - Grocery list covered by transaction;
+
+            - Bank's title for the transaction;
+
+            - Friendly reminder about transaction's nature; and
+
+            - Any other custom property.
+
+
+            This field is further indexed by database and full text search
+            engine.
+        withdrawn_account:
+          $ref: '#/components/schemas/ReferencedAccount'
+        deposited_account:
+          $ref: '#/components/schemas/ReferencedAccount'
+        payment_amount:
+          type: number
+          format: float
+          description: >
+            Nominal, or declared amount of transaction.
+
+
+            Let's say, during the trip to Europe we want to pay for a 100 EUR
+            bill using our dollar debit card.  In that case the payment amount
+            would be 100 EUR,  but the actual transaction amount and hold
+            amount  would be presented in dollars.
+
+
+            Payment currency can be different from the  `hold_currency` and
+            `transaction_currency`.
+        hold_amount:
+          type: number
+          format: float
+          description: >
+            Transaction hold amount.
+
+            It's not nullable.  It's currency equals to withdrawn's account
+            currency.
+
+            - For cash payments it is equal to both `payment_amount`
+              and `transaction_amount`.
+              
+            - For card payments it is always there even before actual
+              money is withdrawn and transaction_amount is not null.
+        transaction_amount:
+          type: number
+          format: float
+          nullable: true
+          description: >
+            Actual withdrawal amount.  It's currency equals to withdrawn's
+            account currency.
+        payment_currency:
+          $ref: '#/components/schemas/ReferencedCurrency'
+        source:
+          $ref: '#/components/schemas/ReferencedSource'
+      required:
+        - id
+        - transactioned_at
+        - accounted_at
+        - warehoused_at
+        - updated_at
+        - title
+        - details
+        - withdrawn_account
+        - deposited_account
+        - payment_amount
+        - payment_currency
+        - hold_amount
+        - transaction_amount
+        - source
+    Account:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: The account ID.
+          readOnly: true
+        name:
+          type: string
+          description: >
+            Title or name of the account.  Not necessarily the one provided by
+            the bank.
+        details:
+          type: string
+          nullable: true
+          description: >
+            Any details describing the account. Format is not enforced, but JSON
+            is recommended. Possible   properties are
+
+            - Address or location of the account;
+
+            - Bank's title for the account;
+
+            - Friendly reminder about account's nature; and
+
+            - Any other custom property.
+
+
+            This field is further indexed by database and full text search
+            engine.
+        currency:
+          $ref: '#/components/schemas/ReferencedCurrency'
+        counterparty:
+          $ref: '#/components/schemas/ReferencedCounterparty'
+        warehoused_at:
+          type: string
+          format: date-time
+          description: Time at which account has been added to the system.
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          description: Time at which account has been last updated in the system.
+          readOnly: true
+        source:
+          $ref: '#/components/schemas/ReferencedSource'
+      required:
+        - id
+        - name
+        - details
+        - currency
+        - counterparty
+        - warehoused_at
+        - updated_at
+        - source
+    ReferencedAccount:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: The account ID.
+        name:
+          type: string
+          description: Title or name of the account.
+          readOnly: true
+        currency:
+          type: object
+          properties:
+            id:
+              type: integer
+              format: int64
+              description: ID of account's currency.
+              readOnly: true
+            code:
+              type: string
+              description: |
+                Official or unofficial ISO 4217 currency code.
+              readOnly: true
+            num:
+              type: string
+              description: Numberical code of the currency.
+              readOnly: true
+              nullable: true
+            name:
+              type: string
+              description: Currency name.
+              readOnly: true
+            digits_after_decimal:
+              type: integer
+              minimum: 0
+              description: Number of digits after the decimal separator.
+              readOnly: true
+          readOnly: true
+        counterparty:
+          type: object
+          properties:
+            id:
+              type: integer
+              format: int64
+              description: The counterparty ID.
+              readOnly: true
+            name:
+              type: string
+              description: Title or name of the counterparty.
+              readOnly: true
+          readOnly: true
+      required:
+        - id
+        - name
+        - currency
+        - counterparty
+    Counterparty:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: The counterparty ID.
+          readOnly: true
+        name:
+          type: string
+          description: >
+            Title or name of the counterparty.  Not necessarily the one provided
+            by the bank.
+        details:
+          type: string
+          nullable: true
+          description: >
+            Any details describing the counterparty. Format is not enforced, but
+            JSON is recommended. Possible   properties are
+
+            - Actual address or location of the counterparty;
+
+            - Legal address or location of the counterparty;
+
+            - Contacts of the counterparty;
+
+            - Bank's title for the counterparty; and
+
+            - Any other custom property.
+
+
+            This field is further indexed by database and full text search
+            engine.
+        warehoused_at:
+          type: string
+          format: date-time
+          description: Time at which counterparty has been added to the system.
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          description: Time at which counterparty has been last updated in the system.
+          readOnly: true
+        source:
+          $ref: '#/components/schemas/ReferencedSource'
+      required:
+        - id
+        - name
+        - details
+        - warehoused_at
+        - updated_at
+        - source
+    ReferencedCounterparty:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: The counterparty ID.
+        name:
+          type: string
+          description: Title or name of the counterparty.
+          readOnly: true
+      required:
+        - id
+        - name
+    Currency:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: The currency ID.
+          readOnly: true
+        name:
+          type: string
+          description: >
+            Name of the currency.  For the ISO 4217 currencies must be equal to
+            the standard name.
+        code:
+          type: string
+          description: >
+            Currency code. Either official ISO 4217 code or unofficial,
+            including cryptocurrency codes. Usually, 3-4 characters long
+            consisting of uppercase letters.
+        num:
+          type: string
+          description: |
+            Numeric code of the currency. According to ISO 4217.
+          nullable: true
+        digits_after_decimal:
+          type: integer
+          minimum: 0
+          description: Number of digits after the decimal separator.
+        warehoused_at:
+          type: string
+          format: date-time
+          description: Time at which counterparty has been added to the system.
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          description: Time at which counterparty has been last updated in the system.
+          readOnly: true
+      required:
+        - id
+        - name
+        - code
+        - num
+        - digits_after_decimal
+        - warehoused_at
+        - updated_at
+    ReferencedCurrency:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: ID of account's currency.
+        code:
+          type: string
+          description: |
+            Official or unofficial ISO 4217 currency code.
+          readOnly: true
+        num:
+          type: string
+          description: Numberical code of the currency.
+          readOnly: true
+          nullable: true
+        name:
+          type: string
+          description: Currency name.
+          readOnly: true
+        digits_after_decimal:
+          type: integer
+          minimum: 0
+          description: Number of digits after the decimal separator.
+          readOnly: true
+      required:
+        - id
+        - code
+        - num
+        - name
+        - digits_after_decimal
+    ReferencedSource:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: ID of input source.
+        name:
+          type: string
+          description: Name of input source.
+          readOnly: true
+      required:
+        - id
+        - name
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+      required:
+        - code
+        - message
+  responses:
+    NotFound:
+      description: The specified resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    BadRequest:
+      description: The request could not be understood by the server.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    UnexpectedError:
+      description: Unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  parameters:
+    fromParam:
+      in: query
+      name: from
+      schema:
+        type: integer
+        minimum: 0
+        default: 0
+      required: false
+      description: Offset of the dataset. Enables paging.
+    sizeParam:
+      in: query
+      name: size
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 1000
+        default: 20
+      required: false
+      description: The number of transactions to return.
+    transactionIdParam:
+      in: path
+      name: transaction_id
+      required: true
+      schema:
+        type: integer
+        minimum: 1
+      description: The transaction ID.
+    accountIdParam:
+      in: path
+      name: account_id
+      required: true
+      schema:
+        type: integer
+        minimum: 1
+      description: The account ID.
+    counterpartyIdParam:
+      in: path
+      name: counterparty_id
+      required: true
+      schema:
+        type: integer
+        minimum: 1
+      description: The counterparty ID.
+    currencyIdParam:
+      in: path
+      name: currency_id
+      required: true
+      schema:
+        type: integer
+        minimum: 1
+      description: The currency ID.
