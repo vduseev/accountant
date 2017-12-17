@@ -1,5 +1,5 @@
 from sqlalchemy import Column, BIGINT, TEXT, INTEGER
-from database_orm import DeclarativeModelBaseClass
+from database_orm.models import DeclarativeModelBaseClass
 
 
 class Currency(DeclarativeModelBaseClass):
@@ -25,7 +25,7 @@ class Currency(DeclarativeModelBaseClass):
             updated_at=self.updated_at
         )
 
-    def to_reference_dict(self):
+    def to_ref_dict(self):
         return dict(
             id=str(self.id),
             name=self.name,

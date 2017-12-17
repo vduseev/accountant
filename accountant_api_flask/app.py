@@ -1,14 +1,12 @@
 from flask import Flask
-from database_orm.database import db_session
-from database_orm.database import init_db
+from database_orm import Database
 
-init_db()
+
 app = Flask(__name__)
-
 
 @app.teardown_appcontext
 def shutdown_session(exception=None):
-    db_session.remove()
+    Database.shutdown_session()
 
 
 @app.route('/')

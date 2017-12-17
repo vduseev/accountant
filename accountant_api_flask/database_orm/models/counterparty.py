@@ -1,7 +1,7 @@
 from sqlalchemy import Column, ForeignKey, BIGINT, TEXT
 from sqlalchemy.orm import relationship
-from database_orm import DeclarativeModelBaseClass
-from database_orm.initialization_exc import ModelInitializationError
+from database_orm.models import DeclarativeModelBaseClass
+from database_orm.exceptions import ModelInitializationException
 
 
 class Counterparty(DeclarativeModelBaseClass):
@@ -30,10 +30,10 @@ class Counterparty(DeclarativeModelBaseClass):
             details=self.details,
             warehoused_at=self.warehoused_at,
             updated_at=self.updated_at,
-            source_id=self.source.to_reference_dict()
+            source_id=self.source.to_ref_dict()
         )
 
-    def to_reference_dict(self):
+    def to_ref_dict(self):
         return dict(
             id=str(self.id),
             name=self.name
@@ -45,7 +45,8 @@ class Counterparty(DeclarativeModelBaseClass):
         if 'name' not in counterparty:
             errors.append('"name" field not found')
         if 'source' not in counterparty:
-            if 'id' not in counterparty['source']:
-                errors.append('"source.id" field not found')
+            errors.append('"source" not found')
+        elif 'id' not in counterparty['source']:
+            errors.append('"source.id" field not found')
         if len(errors) > 0:
-            raise ModelInitializationError(errors)
+            raise ModelInitializationException(errors)

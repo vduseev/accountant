@@ -1,5 +1,5 @@
 from sqlalchemy import Column, BIGINT, TEXT
-from database_orm import DeclarativeModelBaseClass
+from database_orm.models import DeclarativeModelBaseClass
 
 
 class Source(DeclarativeModelBaseClass):
@@ -15,4 +15,10 @@ class Source(DeclarativeModelBaseClass):
             id=str(self.id),
             name=self.name,
             details=self.details
+        )
+
+    def to_ref_dict(self):
+        return dict(
+            id=str(self.id),
+            name=self.name
         )

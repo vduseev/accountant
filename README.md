@@ -19,49 +19,77 @@ Multiplatform accounting software synchronized via cloud.
     * [ ] Use MySQL/PostgreSQL hosted on VPS
       * [ ] Regular backups to some location
     * [ ] Use Amazon's $10 PostgreSQL
-* [ ] Lay out REST API to work with database
+* Lay out REST API to work with database
   * [x] Install Swagger Editor *(Done 12/04/17)*
-  * [x] Study OpenAPI 3.0.0 specification *(Done 12/05/17)*
+  * Study OpenAPI 3.0.0 specification *(Done 12/05/17)*
     * [x] Learn how to describe API info *(Done 12/04/17)*
     * [x] Learn how to describe data models *(Done 12/04/17)*
     * [x] Learn how to describe request body *(Done 12/04/17)*
     * [x] Learn how to specify that ID is required for responses only *(Done 12/04/17)*
-  * [ ] First, describe all necessary endpoints using OpenAPI spec
-    * [ ] Describe data models
+  * Describe all necessary endpoints using OpenAPI spec
+    * Describe data models
       * [x] Transaction *(Done 12/04/17)*
       * [x] Account *(Done 12/05/17)*
       * [x] Counterparty *(Done 12/05/17)*
       * [x] Currency *(Done 12/05/17)*
       * [ ] Balance
-    * [x] Transactions
+    * Transactions
       * [x] addTransaction *(Done 12/05/17)*
       * [x] getTransactions *(Done 12/05/17)*
       * [x] getTransactionById *(Done 12/05/17)*
       * [x] updateTransactionById *(Done 12/05/17)*
       * [x] deleteTransactionById *(Done 12/05/17)*
-    * [x] Accounts *(Done 12/05/17)*
+    * Accounts *(Done 12/05/17)*
       * [x] addAccount *(Done 12/05/17)*
       * [x] getAccounts *(Done 12/05/17)*
       * [x] getAccountById *(Done 12/05/17)*
       * [x] updateAccountById *(Done 12/05/17)*
       * [x] deleteAccountById *(Done 12/05/17)*
-    * [x] Counterparties *(Done 12/05/17)*
+    * Counterparties *(Done 12/05/17)*
       * [x] addCounterparty *(Done 12/05/17)*
       * [x] getCounterparties *(Done 12/05/17)*
       * [x] getCounterpartyById *(Done 12/05/17)*
       * [x] updateCounterpartyById *(Done 12/05/17)*
       * [x] deleteCounterpartyById *(Done 12/05/17)*
-    * [x] Currencies
+    * Currencies
       * [ ] *addCurrency*
       * [x] getCurrencies *(Done 12/05/17)*
       * [x] getCurrencyById *(Done 12/05/17)*
       * [ ] *updateCurrencyById*
       * [ ] *deleteCurrencyById*
-* [ ] Implement SQLite schema creation scripts
+* [x] Implement SQLite schema creation scripts *(Done 12/06/17)*
   * [ ] Add several basic currencies manually
 * [x] Install Swagger Codegen and generate Flask API
   (3.0.0 is not implemented yet in Codegen)
 * [ ] Implement REST API using Python and Flask
+  * Implement ORM via SQLAlchemy
+    * [x] Implement Source model *(Done 12/08/17)*
+    * [x] Implement Currency model *(Done 12/07/17)*
+    * [x] Implement Counterparty model *(Done 12/07/17)*
+    * [x] Implement Account model *(Done 12/08/17)*
+    * [x] Implement Transaction model *(Done 12/11/17)*
+  * Implement endpoints
+    * currencies
+      * [ ] get_currency_by_id
+      * [ ] get_currencies
+    * counterparties
+      * [ ] get_counterparty_by_id
+      * [ ] get_counterparties
+      * [ ] create_counterparty
+      * [ ] update_counterparty_by_id
+      * [ ] delete_counterparty_by_id
+    * accounts
+      * [ ] get_account_by_id
+      * [ ] get_accounts
+      * [ ] create_account
+      * [ ] update_account_by_id
+      * [ ] delete_account_by_id
+    * transactions
+      * [ ] get_transaction_by_id
+      * [ ] get_transactions
+      * [ ] create_transaction
+      * [ ] update_transaction_by_id
+      * [ ] delete_transaction_by_id
 * [ ] Integrate REST API into existing Desktop Qt Client
 * [ ] Implement data importer for ING
   * [ ] Design data flow
