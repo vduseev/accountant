@@ -1,4 +1,4 @@
-from sqlalchemy import Column, BIGINT, TEXT, INTEGER
+from sqlalchemy import Column, TEXT, INTEGER
 from database_orm.models import DeclarativeModelBaseClass
 
 
@@ -6,7 +6,7 @@ class Currency(DeclarativeModelBaseClass):
 
     # Required for ORM functionality.
     __tablename__ = 'currencies'
-    id = Column(BIGINT, primary_key=True)
+    id = Column(INTEGER, primary_key=True)
     name = Column(TEXT, nullable=False)
     code = Column(TEXT, nullable=False)
     num = Column(TEXT, nullable=True)
@@ -16,7 +16,7 @@ class Currency(DeclarativeModelBaseClass):
 
     def to_dict(self):
         return dict(
-            id=str(self.id),
+            id=self.id,
             name=self.name,
             code=self.code,
             num=self.num,
@@ -27,7 +27,7 @@ class Currency(DeclarativeModelBaseClass):
 
     def to_ref_dict(self):
         return dict(
-            id=str(self.id),
+            id=self.id,
             name=self.name,
             code=self.code,
             num=self.num,

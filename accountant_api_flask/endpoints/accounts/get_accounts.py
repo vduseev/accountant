@@ -1,9 +1,5 @@
 from app import app
-from flask import request
-from database_orm.account import Account
-from database_orm.database import db_session
-from sqlalchemy.exc import IntegrityError
-from endpoints import status_codes
+from database_orm.models.account import Account
 from endpoints.accounts import basic_response
 from endpoints.jsonify import jsonify
 

@@ -6,9 +6,9 @@ class Source(DeclarativeModelBaseClass):
 
     # Required for ORM functionality.
     __tablename__ = 'sources'
-    id = Column(BIGINT, primary_key=True),
-    name = Column(TEXT, nullable=False),
-    details = Column(TEXT, nullable=True),
+    id = Column(BIGINT, primary_key=True)
+    name = Column(TEXT, nullable=False)
+    details = Column(TEXT, nullable=True)
 
     def to_dict(self):
         return dict(

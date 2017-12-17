@@ -34,31 +34,35 @@ Multiplatform accounting software synchronized via cloud.
       * [x] Currency *(Done 12/05/17)*
       * [ ] Balance
     * Transactions
-      * [x] addTransaction *(Done 12/05/17)*
-      * [x] getTransactions *(Done 12/05/17)*
-      * [x] getTransactionById *(Done 12/05/17)*
-      * [x] updateTransactionById *(Done 12/05/17)*
-      * [x] deleteTransactionById *(Done 12/05/17)*
+      * [x] POST *(Done 12/05/17)*
+      * [x] GET *(Done 12/05/17)*
+    * Transactions/id
+      * [x] GET *(Done 12/05/17)*
+      * [x] PUT *(Done 12/05/17)*
+      * [x] DELETE *(Done 12/05/17)*
     * Accounts *(Done 12/05/17)*
-      * [x] addAccount *(Done 12/05/17)*
-      * [x] getAccounts *(Done 12/05/17)*
-      * [x] getAccountById *(Done 12/05/17)*
-      * [x] updateAccountById *(Done 12/05/17)*
-      * [x] deleteAccountById *(Done 12/05/17)*
+      * [x] POST *(Done 12/05/17)*
+      * [x] GET *(Done 12/05/17)*
+    * Accounts/id
+      * [x] GET *(Done 12/05/17)*
+      * [x] PUT *(Done 12/05/17)*
+      * [x] DELETE *(Done 12/05/17)*
     * Counterparties *(Done 12/05/17)*
-      * [x] addCounterparty *(Done 12/05/17)*
-      * [x] getCounterparties *(Done 12/05/17)*
-      * [x] getCounterpartyById *(Done 12/05/17)*
-      * [x] updateCounterpartyById *(Done 12/05/17)*
-      * [x] deleteCounterpartyById *(Done 12/05/17)*
+      * [x] POST *(Done 12/05/17)*
+      * [x] GET *(Done 12/05/17)*
+    * Counterparties/id
+      * [x] GET *(Done 12/05/17)*
+      * [x] PUT *(Done 12/05/17)*
+      * [x] DELETE *(Done 12/05/17)*
     * Currencies
       * [ ] *addCurrency*
-      * [x] getCurrencies *(Done 12/05/17)*
-      * [x] getCurrencyById *(Done 12/05/17)*
+      * [x] GET *(Done 12/05/17)*
+    * Currencies/id
+      * [x] GET *(Done 12/05/17)*
       * [ ] *updateCurrencyById*
       * [ ] *deleteCurrencyById*
 * [x] Implement SQLite schema creation scripts *(Done 12/06/17)*
-  * [ ] Add several basic currencies manually
+  * [x] Add several basic currencies manually *(Done 12/17/17)*
 * [x] Install Swagger Codegen and generate Flask API
   (3.0.0 is not implemented yet in Codegen)
 * [ ] Implement REST API using Python and Flask
@@ -70,8 +74,8 @@ Multiplatform accounting software synchronized via cloud.
     * [x] Implement Transaction model *(Done 12/11/17)*
   * Implement endpoints
     * currencies
-      * [ ] get_currency_by_id
-      * [ ] get_currencies
+      * [x] get_currency_by_id *(Done 12/17/17)*
+      * [x] get_currencies *(Done 12/17/17)*
     * counterparties
       * [ ] get_counterparty_by_id
       * [ ] get_counterparties

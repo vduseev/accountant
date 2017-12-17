@@ -1,8 +1,7 @@
 from sqlalchemy import Column, ForeignKey, BIGINT, TEXT
 from sqlalchemy.orm import relationship
-
-from database_orm import DeclarativeModelBaseClass
-from database_orm.exceptions.model_initialization_exception import ModelInitializationException
+from database_orm.models import DeclarativeModelBaseClass
+from database_orm.exceptions import ModelInitializationException
 
 
 class Account(DeclarativeModelBaseClass):

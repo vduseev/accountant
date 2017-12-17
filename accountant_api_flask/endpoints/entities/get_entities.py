@@ -1,9 +1,5 @@
 from app import app
-from flask import request
-from database_orm.counterparty import Counterparty
-from database_orm.database import db_session
-from sqlalchemy.exc import IntegrityError
-from endpoints import status_codes
+from database_orm.models.counterparty import Counterparty
 from endpoints.entities import basic_response
 from endpoints.jsonify import jsonify
 

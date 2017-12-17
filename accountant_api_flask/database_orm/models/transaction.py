@@ -1,10 +1,10 @@
 from sqlalchemy import Column, ForeignKey, BIGINT, TEXT, REAL
 from sqlalchemy.orm import relationship
+from database_orm.models import DeclarativeModelBaseClass
+from database_orm.exceptions import ModelInitializationException
 
-from database_orm.exceptions.model_initialization_exception import ModelInitializationException
 
-
-class Transaction:
+class Transaction(DeclarativeModelBaseClass):
 
     # Required for ORM functionality.
     __tablename__ = 'transactions'
